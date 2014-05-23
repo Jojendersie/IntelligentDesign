@@ -11,17 +11,17 @@ class ScreenManager
 		m_cameraPosition = Vector2f(0.0f, 0.0f);
     }
 
-    Vector2f RelativeCorToScreenCor(Vector2f relativeCor)
+    Vector2f relativeCorToScreenCor(Vector2f relativeCor)
     {
         return (relativeCor - m_cameraPosition) * pixelsPerUnit;
     }
 
-    Vector2f ScreenCorToRelativeCor(Vector2f screenCor)
+    Vector2f screenCorToRelativeCor(Vector2f screenCor)
     {
         return screenCor / pixelsPerUnit + m_cameraPosition;
     }
 
-    float RealtiveLengthToScreenLength(float l)
+    float realtiveLengthToScreenLength(float l)
     {
         return l * pixelsPerUnit;
     }
@@ -32,7 +32,7 @@ class ScreenManager
 private:
 	static immutable int leftBarWidth = 200;
 	static immutable int lowerBarHeight = 50;
-	static immutable int pixelsPerUnit = 30;
+	static immutable int pixelsPerUnit = 20;
 
 	Vector2f m_resolution;
 

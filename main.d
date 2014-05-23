@@ -9,8 +9,8 @@ immutable real timePerFrameSeconds = 1.0f / 60.0f;
 
 void main(string[] args)
 {
-    auto window = new RenderWindow(VideoMode(800,600),"Hello DSFML!");
-	auto game = new Game();
+    auto window = new RenderWindow(VideoMode(1400, 768),"Intelligent Design!");
+	auto game = new Game(window);
 	StopWatch sw;
 
 	// Can't hurt ;)

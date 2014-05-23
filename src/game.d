@@ -4,9 +4,14 @@ import screenmanager;
 
 class Game
 {
+	this(RenderWindow window)
+	{
+		m_screenManager = new ScreenManager(Vector2f(window.getSize().x, window.getSize().y));
+	}
+
 	void render(RenderWindow window)
 	{
-		screenmanager = new ScreenManager(Vector2f(window.getSize().x, window.getSize().y));
+		m_map.render(window, m_screenManager);
 	}
 
 	void update()
@@ -14,8 +19,8 @@ class Game
 	}
 
 private:
-	ScreenManager screenmanager;
-	Map map = new Map();
+	ScreenManager m_screenManager;
+	Map m_map = new Map();
 	//Gene[] globalGenePool = new ;
 	
 }

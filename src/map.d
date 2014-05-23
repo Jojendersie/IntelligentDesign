@@ -1,10 +1,32 @@
 import utils;
+import screenmanager;
+import dsfml.graphics;
+
 
 class Map
 {
 	this()
 	{
 		generateGround();
+	}
+
+	void render(RenderWindow window, ScreenManager screenManager)
+	{
+		// todo: Draw only visible cells
+
+		float cellSize = screenManager.realtiveLengthToScreenLength(1.0f);
+		auto rectangleShape = new RectangleShape(Vector2f(cellSize,cellSize));
+
+		for( int x = 0; x < m_ground.length; ++x )
+		{
+			for( int y = 0; y < m_ground[0].length; ++y )
+			{
+				ubyte greyVal = cast(ubyte)(255.0f * m_ground[x][y]);
+				rectangleShape.fillColor = Color(greyVal,greyVal,greyVal);
+				rectangleShape.position = screenManager.relativeCorToScreenCor(Vector2f(x,y));
+				window.draw(rectangleShape);
+			}
+		}
 	}
 
 	bool isLand(float x, float y)
@@ -18,6 +40,7 @@ class Map
 	}
 
 private:
+	// Each cell is one unit large!
 	float[100][100] m_ground;
 
 	// Use bilinear sampling of a height map to get smoother borders
