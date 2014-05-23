@@ -188,7 +188,7 @@
   <postBuildCommand />
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
- <Folder name="IntelligentDesgin">
+ <Folder name="IntelligentDesign">
   <File path="main.d" />
  </Folder>
 </DProject>

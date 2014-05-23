@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{002A2DE9-8BB6-484D-9802-7E4AD4084715}") = "IntelligentDesgin", "IntelligentDesgin.visualdproj", "{D240A6C7-4B67-4321-ACA0-4611D28E08E8}"
+Project("{002A2DE9-8BB6-484D-9802-7E4AD4084715}") = "IntelligentDesign", "IntelligentDesign.visualdproj", "{D240A6C7-4B67-4321-ACA0-4611D28E08E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
