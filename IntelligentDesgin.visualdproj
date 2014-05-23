@@ -1,0 +1,11 @@
+<DProject>
+ <ProjectGuid>d240a6c7-4b67-4321-aca0-4611d28e08e8</ProjectGuid>
+ <Config name="Debug">
+  <!-- default to defaults -->
+ </Config>
+ <Config name="Release">
+  </Config>
+ <Folder name="IntelligentDesgin">
+  <File path="main.d" />
+ </Folder>
+</DProject>
