@@ -198,6 +198,7 @@
   <File path="src\mapobject.d" />
   <File path="src\plant.d" />
   <File path="src\properties.d" />
+  <File path="src\screenmanager.d" />
   <File path="src\utils.d" />
  </Folder>
 </DProject>
