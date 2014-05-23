@@ -1,35 +1,27 @@
-module main;
-
 import dsfml.graphics;
+import game;
+import std.datetime;
+import core.thread;
+import std.stdio;
+import std.string;
+
+immutable real timePerFrameSeconds = 1.0f / 60.0f;
 
 void main(string[] args)
 {
     auto window = new RenderWindow(VideoMode(800,600),"Hello DSFML!");
+	auto game = new Game();
+	StopWatch sw;
 
-    auto head = new CircleShape(100);
-    head.fillColor = Color.Green;
-    head.position = Vector2f(300,100);
+	// Can't hurt ;)
+	window.setVerticalSyncEnabled(true);
 
-    auto leftEye = new CircleShape(10);
-    leftEye.fillColor = Color.Blue;
-    leftEye.position = Vector2f(350,150);
-
-    auto rightEye = new CircleShape(10);
-    rightEye.fillColor = Color.Blue;
-    rightEye.position = Vector2f(430,150);
-
-    auto smile = new CircleShape(30);
-    smile.fillColor = Color.Red;
-    smile.position = Vector2f(368,200);
-
-    auto smileCover = new RectangleShape(Vector2f(60,30));
-    smileCover.fillColor = Color.Green;
-    smileCover.position = Vector2f(368,200);
-
+	sw.start();
     while (window.isOpen())
     {
-        Event event;
+		sw.reset();
 
+        Event event;
         while(window.pollEvent(event))
         {
             if(event.type == event.EventType.Closed)
@@ -38,14 +30,18 @@ void main(string[] args)
             }
         }
 
+		game.update();
+			
         window.clear();
-
-        window.draw(head);
-        window.draw(leftEye);
-        window.draw(rightEye);
-        window.draw(smile);
-        window.draw(smileCover);
+		game.render(window);
 
         window.display();
+
+		real frameTimeSeconds = cast(real)sw.peek().length / TickDuration.ticksPerSec;
+		if(frameTimeSeconds < timePerFrameSeconds)
+		{
+			core.thread.Thread.sleep(dur!("nsecs")(cast(long)((timePerFrameSeconds - frameTimeSeconds) * 1000000000)));
+		}
+		//writeln("Waiting ", (timePerFrameSeconds - frameTimeSeconds));
     }
 }

@@ -190,6 +190,7 @@
  </Config>
  <Folder name="IntelligentDesign">
   <File path="src\entity.d" />
+  <File path="src\game.d" />
   <File path="src\genes.d" />
   <File path="src\hormon.d" />
   <File path="main.d" />
