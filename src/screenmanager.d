@@ -26,7 +26,7 @@ class ScreenManager
         return l * pixelsPerUnit;
     }
 
-	@property Vector2f cameraPosition()				{ return m_cameraPosition; }
+	@property ref Vector2f cameraPosition()			{ return m_cameraPosition; }
 	@property void cameraPosition(Vector2f value)	{ m_cameraPosition = value; }
 
 private:

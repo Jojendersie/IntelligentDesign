@@ -12,11 +12,11 @@ class Map
 
 	void render(RenderWindow window, ScreenManager screenManager)
 	{
-		// todo: Draw only visible cells
-
+		// todo: Draw only visible cells (probably not that important if next todo is done!)
+		// todo: Use a custom "vertex buffer"
+		// todo: set each corner to a a sensible value to get bilinear filtering for FREEEEE :)
 		float cellSize = screenManager.realtiveLengthToScreenLength(1.0f);
 		auto rectangleShape = new RectangleShape(Vector2f(cellSize,cellSize));
-
 		for( int x = 0; x < m_ground.length; ++x )
 		{
 			for( int y = 0; y < m_ground[0].length; ++y )
