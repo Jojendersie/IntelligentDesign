@@ -189,6 +189,13 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="IntelligentDesign">
+  <File path="src\entity.d" />
+  <File path="src\genes.d" />
+  <File path="src\hormon.d" />
   <File path="main.d" />
+  <File path="src\map.d" />
+  <File path="src\mapobject.d" />
+  <File path="src\plant.d" />
+  <File path="src\properties.d" />
  </Folder>
 </DProject>

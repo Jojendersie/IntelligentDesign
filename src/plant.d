@@ -1,4 +1,5 @@
 import mapobject;
+import std.math;
 
 class Plant: MapObject
 {

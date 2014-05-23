@@ -22,7 +22,7 @@ private:
 		float fy = y - iy;
 		assert(ix >= 0 && ix < 99);
 		assert(iy >= 0 && iy < 99);
-		return (m_ground[x][y] * (1.0f - fx) + m_ground[x+1][y] * fx) * (1.0f - fy)
-			   (m_ground[x][y+1] * (1.0f - fx) + m_ground[x+1][y+1] * fx) * fy;
+		return (m_ground[ix][iy] * (1.0f - fx) + m_ground[ix+1][iy] * fx) * (1.0f - fy) +
+			   (m_ground[ix][iy+1] * (1.0f - fx) + m_ground[ix+1][iy+1] * fx) * fy;
 	}
 }

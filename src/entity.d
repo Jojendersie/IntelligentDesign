@@ -1,9 +1,11 @@
 import mapobject;
+import genes;
+import properties;
 
 class Entity: MapObject
 {
 	// Get one of the N genes
-	const Gene getGene(int slot)
+	const(Gene) getGene(int slot) const
 	{
 		return m_geneSlots[slot];
 	}
@@ -19,5 +21,5 @@ private:
 	Properties m_properties;
 	Gene[5] m_geneSlots;
 	float m_vitality;
-	Species m_species;
+	//Species m_species;
 }
