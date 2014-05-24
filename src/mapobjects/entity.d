@@ -36,8 +36,8 @@ class Entity: MapObject
 
 		// fill genes by inheritance
 		Gene[] parentGenePool = parent0.m_geneSlots ~ parent1.m_geneSlots;
-		Gene[] parentGenes = chooseGenes(parentGenePool, m_geneSlots.length);
-		for(int i=0; i<parentGenes.length; ++i)
+		Gene[] parentGenes = chooseGenes(parentGenePool, m_geneSlots.length-1);
+		for(int i=0; i<parentGenes.length-1; ++i)
 			m_geneSlots[i] = parentGenes[i];
 
 		// choose last gene
@@ -48,12 +48,23 @@ class Entity: MapObject
 
 	Gene[] chooseGenes(Gene[] genePool, int numGenesToChoose)
 	{
-		Gene[] genePoolCpy = genePool.dup;
+		Gene[] genePoolCpy;
 		Gene[] outputGenes = new Gene[numGenesToChoose];
 
 		float totalPriority = 0.0f;
-		for(int pgene=0; pgene<genePoolCpy.length; ++pgene)
-			totalPriority += m_species.genes()[genePoolCpy[pgene]].priority.y;
+		for(int pgene=0; pgene<genePool.length; ++pgene)
+		{
+			// add if not duplicated
+			float contained = false;
+			for(int xgene=0; xgene<genePoolCpy.length; ++xgene)
+				if( genePool[pgene] == genePoolCpy[xgene] )
+					contained = true;
+			if( !contained )
+			{
+				genePoolCpy ~= genePool[pgene];
+				totalPriority += m_species.genes()[genePool[pgene]].priority.y;
+			}
+		}
 		for(int i=0; i<numGenesToChoose; ++i)
 		{
 			float choosenGene = uniform(0.0f, totalPriority);
@@ -65,7 +76,7 @@ class Entity: MapObject
 					continue;
 				float currentPrio = m_species.genes()[genePoolCpy[pgene]].priority.y;
 				currentPrioritySum += currentPrio;
-				if(currentPrioritySum > choosenGene)
+				if(currentPrioritySum >= choosenGene)
 				{
 					outputGenes[i] = genePoolCpy[pgene];
 					genePoolCpy[pgene] = null;
