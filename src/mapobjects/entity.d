@@ -113,7 +113,7 @@ class Entity: MapObject
 			{
 				Vector2f dir = other.position - position;
 				float attr = attraction(other);
-				targetingDirection += dir * attr;
+				targetingDirection += dir * attr / (dir.x*dir.x + dir.y*dir.y);
 			}
 		}
 
