@@ -77,11 +77,14 @@ class Entity: MapObject
 		return m_geneSlots[slot];
 	}
 
+	float getRadius() const	{ return m_entityRadius * (1.0f + log(m_vitality / 100.0f + 1.0f)); }
+
 
 	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
-		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_entityRadius), 10);
-		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_entityRadius, m_entityRadius));
+		float radius = getRadius();
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(radius), 10);
+		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(radius, m_entityRadius));
 		circleShape.fillColor = m_species.color;
 		window.draw(circleShape);
 	}
@@ -113,7 +116,18 @@ class Entity: MapObject
 			{
 				Vector2f dir = other.position - position;
 				float attr = attraction(other);
-				targetingDirection += dir * attr / (dir.x*dir.x + dir.y*dir.y);
+				float distSq = (dir.x*dir.x + dir.y*dir.y);
+				targetingDirection += dir * attr / distSq;
+				// Eat or Sex?
+				if( distSq <= 0.1f )
+				{
+					float foodValue = getFootValue(other);
+					if( foodValue > 0.0f )
+					{
+						m_vitality += foodValue;
+						other.removed = true;
+					}
+				}
 			}
 		}
 
@@ -171,19 +185,38 @@ private:
 	float attraction(MapObject other)
 	{
 		// Smoothstep
-		float likesSex = (m_vitality - 100.0f) * 0.1f;
+		float likesSex = (m_vitality - m_sexThreshold) * 0.1f;
 		likesSex = fmax(0.0f, fmin(1.0f, likesSex));
-		likesSex *= likesSex * (3 - 2 * likesSex);
+		likesSex *= likesSex * (3 - 2 * likesSex) * 0.9f;
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
-			return e.species == m_species ? likesSex : -1.0f;
+			if( e.species != m_species ) return -1.0f;	// Enemy
+			return (e.m_vitality > m_sexThreshold) ? likesSex : 0.0f;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
 			return p.getEnergy() * (1.0f - likesSex);
 		}
+		return 0.0f;
+	}
+
+	// Compute the gain of eating something
+	float getFootValue(MapObject other)
+	{
+		Entity e = cast(Entity)other;
+		if( e !is null && e.m_species != m_species )
+		{
+			// todo fight?
+			return e.m_vitality * 0.8f;
+		}
+		Plant p = cast(Plant)other;
+		if( p !is null )
+		{
+			return p.getEnergy() * m_plantMultiplyer;
+		}
+
 		return 0.0f;
 	}
 
@@ -202,8 +235,10 @@ private:
 
 
 
+	enum float m_sexThreshold = 100.0f;
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
+	enum float m_plantMultiplyer = 40.0f;
 }
