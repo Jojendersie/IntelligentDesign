@@ -23,7 +23,7 @@
   <isSolaris>0</isSolaris>
   <scheduler>0</scheduler>
   <useDeprecated>0</useDeprecated>
-  <errDeprecated>0</errDeprecated>
+  <errDeprecated>1</errDeprecated>
   <useAssert>0</useAssert>
   <useInvariants>0</useInvariants>
   <useIn>0</useIn>
@@ -35,9 +35,9 @@
   <useInline>0</useInline>
   <release>0</release>
   <preservePaths>0</preservePaths>
-  <warnings>0</warnings>
-  <infowarnings>0</infowarnings>
-  <checkProperty>0</checkProperty>
+  <warnings>1</warnings>
+  <infowarnings>1</infowarnings>
+  <checkProperty>1</checkProperty>
   <genStackFrame>0</genStackFrame>
   <pic>0</pic>
   <cov>0</cov>
@@ -107,7 +107,7 @@
   <verbose>0</verbose>
   <vtls>0</vtls>
   <symdebug>0</symdebug>
-  <optimize>0</optimize>
+  <optimize>1</optimize>
   <cpu>0</cpu>
   <isX86_64>0</isX86_64>
   <isLinux>0</isLinux>
@@ -117,7 +117,7 @@
   <isSolaris>0</isSolaris>
   <scheduler>0</scheduler>
   <useDeprecated>0</useDeprecated>
-  <errDeprecated>0</errDeprecated>
+  <errDeprecated>1</errDeprecated>
   <useAssert>0</useAssert>
   <useInvariants>0</useInvariants>
   <useIn>0</useIn>
@@ -129,9 +129,9 @@
   <useInline>0</useInline>
   <release>1</release>
   <preservePaths>0</preservePaths>
-  <warnings>0</warnings>
-  <infowarnings>0</infowarnings>
-  <checkProperty>0</checkProperty>
+  <warnings>1</warnings>
+  <infowarnings>1</infowarnings>
+  <checkProperty>1</checkProperty>
   <genStackFrame>0</genStackFrame>
   <pic>0</pic>
   <cov>0</cov>
@@ -192,6 +192,7 @@
   <File path="src\entity.d" />
   <File path="src\game.d" />
   <File path="src\genes.d" />
+  <File path="src\gui.d" />
   <File path="src\hormon.d" />
   <File path="main.d" />
   <File path="src\map.d" />
