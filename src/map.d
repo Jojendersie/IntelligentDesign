@@ -22,8 +22,8 @@ class Map
 	{
 		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCoor;
 		immutable Vector2i visibleGameArea_UnitsMin = Vector2i(max(cast(int)visibleGameArea.left, 0), max(cast(int)visibleGameArea.top, 0));
-		immutable Vector2i visibleGameArea_UnitsMax = Vector2i(min(cast(uint)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length),
-															   min(cast(uint)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length));
+		immutable Vector2i visibleGameArea_UnitsMax = Vector2i(min(cast(uint)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length-1),
+															   min(cast(uint)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length-1));
 
 		// todo: Use a custom "vertex buffer"
 		// todo: set each corner to a a sensible value to get bilinear filtering for FREEEEE :)
@@ -34,8 +34,11 @@ class Map
 		{
 			for( int y = visibleGameArea_UnitsMin.y; y < visibleGameArea_UnitsMax.y; ++y )
 			{
-				ubyte greyVal = cast(ubyte)(255.0f * m_ground[x][y]);
-				rectangleShape.fillColor = Color(greyVal,greyVal,greyVal);
+				ubyte greyVal = cast(ubyte)(127.5f * m_ground[x][y] + 127.5f);
+				if( isLand(Vector2f(x, y)) )
+					rectangleShape.fillColor = Color(0, greyVal, 0);
+				else 
+					rectangleShape.fillColor = Color(0, 0, greyVal);
 				rectangleShape.position = screenManager.relativeCoorToScreenCoor(Vector2f(x,y));
 				window.draw(rectangleShape);
 			}
@@ -54,11 +57,15 @@ class Map
 
 	bool isLand(Vector2f pos) const
 	{
+		if( pos.x < 0.0f || pos.x >= (m_ground.length-1) ) return false;
+		if( pos.y < 0.0f || pos.y >= (m_ground[0].length-1) ) return false;
 		return sampleGround(pos) > 0.0f;
 	}
 
 	bool isWater(Vector2f pos) const
 	{
+		if( pos.x < 0.0f || pos.x >= (m_ground.length-1) ) return false;
+		if( pos.y < 0.0f || pos.y >= (m_ground[0].length-1) ) return false;
 		return sampleGround(pos) <= 0.0f;
 	}
 
@@ -88,6 +95,8 @@ class Map
 		}
 		return result;
 	}
+
+	//MapObject
 
 private:
 	// Each cell is one unit large!
