@@ -5,8 +5,8 @@
 			"image": "zero.png",
 			"velocityWater": 1,
 			"velocityLand": 1,
-			"vitalityWater": -2,
-			"vitalityLand": -2,
+			"vitalityWater": -5,
+			"vitalityLand": -5,
 			"poisonous": 0,
 			"poisonResistence": 0,
 			"spiky": 0,
@@ -36,12 +36,12 @@
 		{
 			"name": "Lung",
 			"image": "lung.png",
-			"vitalityLand": 2
+			"vitalityLand": 5
 		},
 		{
 			"name": "Gill",
 			"image": "gill.png",
-			"vitalityWater": 2
+			"vitalityWater": 5
 		},
 		{
 			"name": "Poisonous",

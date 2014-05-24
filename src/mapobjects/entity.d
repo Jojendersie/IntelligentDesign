@@ -124,9 +124,9 @@ class Entity: MapObject
 				Vector2f dir = other.position - position;
 				float attr = attraction(other);
 				float distSq = (dir.x*dir.x + dir.y*dir.y);
-				targetingDirection += dir * attr / distSq;
+				targetingDirection += dir * attr / fmax(1e-10f, distSq);
 				// Eat or Sex?
-				if( distSq <= 0.1f )
+				if( distSq <= 0.3f )
 				{
 					Entity e = cast(Entity)other;
 					if( e !is null && e.m_species == m_species)
@@ -151,15 +151,23 @@ class Entity: MapObject
 		Xorshift rnd;
 		// Use some property values to increase the diversity
 		rnd.seed(m_properties.vitality + m_properties.vitalityWater + m_properties.vitalityLand);
-		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 20.0f
-			+ (m_properties.velocityLand - m_properties.velocityWater) * 8.0f;
+		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 0.5f
+			+ (m_properties.velocityLand - m_properties.velocityWater) * 0.15f;
+		float maxViewDistance = m_properties.viewDistance * m_viewDistanceMultiplier;
 		// Take 16 random samples in a circle and check for land / water
-		for( int i = 0; i < 16; ++i )
+		for( int i = 0; i < 8; ++i )
 		{
 			float phi = uniform(0.0f, cast(float)PI*2.0f, rnd);
-			float radius = sqrt(uniform(0.0f, 1.0f, rnd)) * m_properties.viewDistance * m_viewDistanceMultiplier;
-			Vector2f position = Vector2f(sin(phi), cos(phi)) * radius;
-			targetingDirection += position * (map.isLand(position) ? prefersLand : -prefersLand) / radius;
+			float radius = sqrt(uniform(0.00001f, 1.0f, rnd)) * maxViewDistance;
+			Vector2f direction = Vector2f(sin(phi), cos(phi)) * radius;
+			float factor = 0.0f;
+			if( map.isOnMap(m_position + direction) && map.isOnMap(m_position - direction) ) 
+			{
+				factor = map.isLand(m_position + direction) ? prefersLand : -prefersLand;
+				factor -= map.isLand(m_position - direction) ? prefersLand : -prefersLand;
+			}
+			//else factor = 3.0f / (radius + 1e-10f);
+			targetingDirection += direction * factor / fmax(radius, 1e-10f);
 		}
 
 		// interpolate direction and move
@@ -171,6 +179,7 @@ class Entity: MapObject
 		else
 			direction *= m_properties.velocityWater;
 		m_position += direction * m_speedMultiplier;
+		assert(!isnan(m_position.x));
 
 		// new walk goal?
 		if(m_numStepsSinceAngleChange > m_numStepsSameWalkAim)
@@ -235,7 +244,7 @@ private:
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return p.getEnergy() * (1.0f - likesSex * 0.5f);
+			return p.getEnergy() * (1.0f - likesSex * 0.75f);
 		}
 		return 0.0f;
 	}

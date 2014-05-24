@@ -9,6 +9,7 @@ import dsfml.graphics;
 import std.algorithm;
 import std.random;
 import std.array;
+import std.stdio;
 
 class Map
 {
@@ -66,6 +67,8 @@ class Map
 			if( !m_mapObjects[i].removed )
 				m_mapObjects[i].update(this);
 
+		m_mapObjects ~= m_newObjects;
+		m_newObjects.clear();
 		removeObjects();
 	}
 
@@ -115,6 +118,11 @@ class Map
 			result = true;
 		}
 		return result;
+	}
+
+	bool isOnMap(Vector2f pos)
+	{
+		return (pos.x >= 0) && (pos.y >= 0) && (pos.x < m_ground.length-1) && (pos.y < m_ground[0].length-1);
 	}
 
 	MapObject[] queryObjects(Vector2f pos, float maxDistance)
@@ -176,20 +184,25 @@ class Map
 
 	void addObject(MapObject object)
 	{
-		m_mapObjects ~= object;
+		m_newObjects ~= object;
 	}
 
 private:
 	// Each cell is one unit large!
 	float[100][100] m_ground;
 	MapObject[] m_mapObjects;
+	MapObject[] m_newObjects;
 	Texture m_groundTexture;
 	Sprite m_groundSprite;
 
 	// Use bilinear sampling of a height map to get smoother borders
 	float sampleGround(Vector2f pos) const
 	{
+		float a = pos.x;
+		float b = pos.y;
 		clampToGame(pos);
+		float c = pos.x;
+		float d = pos.y;
 
 		int ix = cast(int)pos.x;
 		int iy = cast(int)pos.y;
