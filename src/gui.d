@@ -128,14 +128,13 @@ class GUI
 		foreach_reverse( gene; species.genes.keys )
 		{
 			const Species.GeneUsage* usage = &species.genes[gene];
-			if( usage.num > 0 )
-			{
-				Sprite sprite = new Sprite(gene.texture());
-				//writeln(usage.priority.x * (screenManager.geneBarWidth - 64) + 32 + screenManager.geneBarX);
-				sprite.position = screenManager.getGeneDisplayScreenPos(usage.priority);
-				sprite.scale = Vector2f(1.0f, 1.0f);
-				window.draw(sprite);
-			}
+			
+			Sprite sprite = new Sprite(gene.texture());
+			//writeln(usage.priority.x * (screenManager.geneBarWidth - 64) + 32 + screenManager.geneBarX);
+			sprite.position = screenManager.getGeneDisplayScreenPos(usage.priority);
+			sprite.scale = Vector2f(1.0f, 1.0f);
+			sprite.color = (usage.num > 0 ? Color.White : Color(100,100,100,100));
+			window.draw(sprite);
 		}
 	}
 

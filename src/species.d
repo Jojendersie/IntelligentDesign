@@ -1,6 +1,7 @@
 import genes;
 import std.random;
 import dsfml.graphics;
+import game;
 
 class Species
 {
@@ -9,6 +10,12 @@ class Species
 		// Choose a random color
 		m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
 		m_isPlayer = isPlayer;
+
+		foreach(gene; Game.globalGenePool())
+		{
+			m_genes[gene] = GeneUsage();
+			m_genes[gene].randomizePriority();
+		}
 	}
 
 	// updates gene priorities automatically - ONLY FOR NON-HUMAN PLAYERs!

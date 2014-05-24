@@ -105,12 +105,12 @@ class Map
 		}
 		if(pos.x >= m_ground.length-1)
 		{
-			pos.x = nextDown(cast(float)m_ground.length-1);
+			pos.x = cast(float)m_ground.length-1.001f;
 			result = true;
 		}
 		if(pos.y >= m_ground[0].length-1)
 		{
-			pos.y = nextDown(cast(float)m_ground[0].length-1);
+			pos.y = cast(float)m_ground[0].length-1.001f;
 			result = true;
 		}
 		return result;
