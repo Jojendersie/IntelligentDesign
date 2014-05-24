@@ -86,7 +86,7 @@ class Entity: MapObject
 		m_displayRadius = getRadius();
 		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius),
 										   m_species.isPlayer ? 3 : 10);
-		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_entityRadius));
+		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_displayRadius));
 		circleShape.fillColor = m_species.color;
 		if( canHaveSex() )
 		{
