@@ -201,12 +201,12 @@ private:
 			uint numEntities = uniform(m_startPopMinNum, m_startPopMaxNum, rnd);
 
 			// find a home!
-			immutable Vector2f populationCenter = Vector2f(uniform(m_startPopDistribution*1.5f, m_ground.length    - m_startPopDistribution * 1.5f, rnd),
-									   					   uniform(m_startPopDistribution*1.5f, m_ground[0].length - m_startPopDistribution * 1.5f, rnd));
+			s.origin = Vector2f(uniform(m_startPopDistribution*1.5f, m_ground.length    - m_startPopDistribution * 1.5f, rnd),
+								uniform(m_startPopDistribution*1.5f, m_ground[0].length - m_startPopDistribution * 1.5f, rnd));
 
 			for(int i=0; i<numEntities; ++i)
 			{
-				Vector2f entityPos = populationCenter;
+				Vector2f entityPos = s.origin;
 				entityPos.x += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 				entityPos.y += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 

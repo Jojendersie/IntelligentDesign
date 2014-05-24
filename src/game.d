@@ -23,6 +23,13 @@ class Game
 		m_player = new Player(m_allSpecies[0]);
 
 		m_map = new Map(m_allSpecies, m_globalGenePool);
+
+		// Zoom to player
+		Vector2f centering = m_screenManager.resolution - Vector2f(m_screenManager.geneBarWidth,
+																   m_screenManager.lowerBarHeight);
+		m_screenManager.cameraPosition = m_allSpecies[0].origin
+			- m_screenManager.screenDirToRelativeDir(Vector2i(cast(int)centering.x/2,
+															  cast(int)centering.y/2));
 	}
 
 	void render(RenderWindow window)

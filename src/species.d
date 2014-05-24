@@ -51,6 +51,7 @@ class Species
 
 	@property const(Color) color() const { return m_color; }
 
+	Vector2f origin;	// Spawn center
 private:
 	// todo: add used genes and their priorities
 
