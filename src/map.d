@@ -51,6 +51,15 @@ class Map
 
 	void update()
 	{
+		// spawn a plant
+		++m_turnsSinceLastPlantSpawn;
+		if(m_turnsSinceLastPlantSpawn > m_turnsPerPlantSpawn)
+		{
+			m_turnsSinceLastPlantSpawn = 0;
+			m_mapObjects ~= new Plant(Vector2f(uniform(0.0f, nextDown(cast(float)m_ground.length-1)),
+											   uniform(0.0f, nextDown(cast(float)m_ground[0].length-1))));
+		}
+
 		foreach(mapObject; m_mapObjects)
 			mapObject.update(this);
 	}
@@ -196,4 +205,7 @@ private:
 	enum uint m_startPopMinNum = 10;
 	enum uint m_startPopMaxNum = 15;
 	enum float m_startPopDistribution = 5.0f;
+	enum uint m_turnsPerPlantSpawn = 3;
+
+	uint m_turnsSinceLastPlantSpawn = 0;
 }
