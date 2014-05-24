@@ -100,10 +100,29 @@ class GUI
 			// clear hovered object!
 			m_hoveredObject = null;
 		}
-		else if(m_hoveredObject is null)
+		else 
 		{
-			m_messageTopic.setString(""d);
-			m_messageInfo.setString(""d);
+			if(m_hoveredObject is null)
+			{
+				m_messageTopic.setString(""d);
+				m_messageInfo.setString(""d);
+			}
+			else if(cast(Plant)m_hoveredObject !is null)
+			{
+				m_messageTopic.setString("Plant:"d);
+				string description = "Energy: " ~ to!string(cast(int)(cast(Plant)m_hoveredObject).getEnergy());
+				m_messageInfo.setString(to!dstring(description));
+			}
+			else if(cast(Entity)m_hoveredObject !is null)
+			{
+				Entity entity = cast(Entity)m_hoveredObject;
+
+				m_messageTopic.setString("Entity:"d);
+
+				char[] description;
+				description ~= "Energy: " ~ to!string(cast(int)entity.vitality) ~ " -- " ~ entity.properties.getTextDescription();
+				m_messageInfo.setString(to!dstring(description));
+			}
 		}
 	}
 
@@ -164,23 +183,6 @@ class GUI
 	void updateHoverObject(MapObject obj)
 	{
 		m_hoveredObject = obj;
-
-		if(cast(Plant)obj !is null)
-		{
-			m_messageTopic.setString("Plant:"d);
-			string description = "Energy: " ~ to!string(cast(int)(cast(Plant)obj).getEnergy());
-			m_messageInfo.setString(to!dstring(description));
-		}
-		else if(cast(Entity)obj !is null)
-		{
-			Entity entity = cast(Entity)obj;
-
-			m_messageTopic.setString("Entity:"d);
-
-			char[] description;
-			description ~= "Energy: " ~ to!string(cast(int)entity.vitality) ~ " -- " ~ entity.properties.getTextDescription();
-			m_messageInfo.setString(to!dstring(description));
-		}
 	}
 
 private:
