@@ -37,7 +37,7 @@ class Entity: MapObject
 		// fill genes by inheritance
 		Gene[] parentGenePool = parent0.m_geneSlots ~ parent1.m_geneSlots;
 		Gene[] parentGenes = chooseGenes(parentGenePool, m_geneSlots.length-1);
-		for(int i=0; i<parentGenes.length-1; ++i)
+		for(int i=0; i<parentGenes.length; ++i)
 			m_geneSlots[i] = parentGenes[i];
 
 		// choose last gene
@@ -81,8 +81,11 @@ class Entity: MapObject
 					outputGenes[i] = genePoolCpy[pgene];
 					genePoolCpy[pgene] = null;
 					totalPriority -= currentPrio;
+					break;
 				}
 			}
+
+			assert(outputGenes[i] !is null);
 		}
 		return outputGenes;
 	}
@@ -153,7 +156,7 @@ class Entity: MapObject
 					Entity e = cast(Entity)other;
 					if( e !is null )
 					{
-						if( m_species == m_species )
+						if( e.m_species == m_species )
 						{
 							// Have sex.
 							if( e.canHaveSex() && canHaveSex())
