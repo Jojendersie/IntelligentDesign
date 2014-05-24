@@ -3,12 +3,18 @@ import map;
 import screenmanager;
 import player;
 import gui;
+import std.file;
+import std.json;
+import std.conv;
+import properties;
+import genes;
 
 class Game
 {
 	this(RenderWindow window)
 	{
 		m_screenManager = new ScreenManager(Vector2f(window.size().x, window.size().y));
+		loadGenes();
 	}
 
 	void render(RenderWindow window)
@@ -24,10 +30,25 @@ class Game
 		m_player.update(m_screenManager);
 	}
 
+	void loadGenes()
+	{
+		// Load the gene file as string
+		auto content = to!string(read("content/gene.json"));
+		JSONValue root = parseJSON(content);
+		JSONValue[] geneArray = root.object["genes"].array;
+
+		Properties prop;
+		foreach( geneJSON; geneArray )
+		{
+			JSONValue[string] geneData = geneJSON.object;
+			globalGenePool[geneData["name"].str] = new Gene(geneData);
+		}
+	}
+
 private:
 	ScreenManager m_screenManager;
 	Map m_map = new Map();
-	//Gene[] globalGenePool = new ;
+	Gene[string] globalGenePool;
 	Player m_player = new Player();
 	GUI m_gui = new GUI();
 }

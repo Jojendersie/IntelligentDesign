@@ -2,8 +2,8 @@ struct Properties
 {
 	int velocityWater;		// Movement factor in water
 	int velocityLand;		// Movement factor on land
-	int damageWater;		// Life loss factor in water
-	int damageLand;			// Life loss factor on land
+	int vitatlityWater;		// Life loss factor in water
+	int vitatlityLand;		// Life loss factor on land
 	int poisonous;			// Damage value if eaten
 	int poisonResistence;	// Resistence value if eating
 	int spiky;				// Damaga value if eaten
@@ -11,6 +11,7 @@ struct Properties
 	int herbivore;			// Can eat plants
 	int carnivore;			// Can eat other animals
 	int viewDistance;		// How far can this unit see
+	int vitatlity;			// Consumption ot gain of vitatlity
 
 	Properties opBinary(string op)(Properties rhs)
 	{
