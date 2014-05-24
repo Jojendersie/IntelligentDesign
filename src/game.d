@@ -45,8 +45,10 @@ class Game
 	{
 		m_map.update();
 		
+		Vector2f mouseWorldPos = m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window));
+		m_map.setAttraction(Mouse.isButtonPressed(Mouse.Button.Left), mouseWorldPos);
 
-		MapObject hoverObject = m_map.queryObjectExact(m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window)));
+		MapObject hoverObject = m_map.queryObjectExact(mouseWorldPos);
 		if(Mouse.isButtonPressed(Mouse.Button.Left))
 			m_gui.updateHoverObject(hoverObject);
 

@@ -175,7 +175,7 @@ class Map
 		{
 			if( m_mapObjects[i].removed )
 			{
-				delete(m_mapObjects[i]);
+			//	delete(m_mapObjects[i]);
 				m_mapObjects.replaceInPlace(i, i+1, [m_mapObjects.back()]);
 				m_mapObjects.popBack();
 			}
@@ -186,6 +186,17 @@ class Map
 	{
 		m_newObjects ~= object;
 	}
+
+	void setAttraction(bool attracting, Vector2f attractionPos)
+	{
+		m_attracting = attracting;
+		m_attractionPos = attractionPos;
+	}
+
+	@property bool attracting() { return m_attracting;} 
+	@property Vector2f attractionPos() {return m_attractionPos;}
+
+
 
 private:
 	// Each cell is one unit large!
@@ -292,4 +303,7 @@ private:
 	enum uint m_turnsPerPlantSpawn = 3;
 
 	uint m_turnsSinceLastPlantSpawn = 0;
+
+	bool m_attracting = false;
+	Vector2f m_attractionPos;
 }

@@ -8,7 +8,7 @@ import game;
 
 import dsfml.graphics;
 import std.math;
-import std.random; 
+import std.random;
 
 class Entity: MapObject
 {
@@ -180,6 +180,15 @@ class Entity: MapObject
 			targetingDirection += direction * factor / fmax(radius, 1e-10f);
 		}
 
+		// attraction to mouse
+		if(m_species.isPlayer && map.attracting)
+		{
+			Vector2f toAttraction = map.attractionPos - m_position;
+			float attractionDist = toAttraction.length();
+			if(attractionDist < maxViewDistance*2)
+				targetingDirection += toAttraction * (m_attractionPointFactor / attractionDist);
+		}
+
 		// interpolate direction and move
 		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
 		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));
@@ -188,6 +197,8 @@ class Entity: MapObject
 			direction *= m_properties.velocityLand;
 		else
 			direction *= m_properties.velocityWater;
+
+
 		m_position += direction * m_speedMultiplier;
 		assert(!isnan(m_position.x));
 
@@ -296,4 +307,5 @@ private:
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
+	enum float m_attractionPointFactor = 10.0f;
 }
