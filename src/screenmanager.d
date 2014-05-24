@@ -20,6 +20,11 @@ class ScreenManager
         return screenCor / m_pixelsPerUnit + m_cameraPosition;
     }
 
+	Vector2f screenDirToRelativeDir(Vector2i screenCor) const
+    {
+        return Vector2f(screenCor.x, screenCor.y) / m_pixelsPerUnit;
+    }
+
     float relativeLengthToScreenLength(float l) const
     {
         return l * m_pixelsPerUnit;
