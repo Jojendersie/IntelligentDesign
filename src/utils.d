@@ -1,8 +1,10 @@
 import std.math;
+import dsfml.system;
 
-float lerp(float a, float b, float t)
+T lerp(T)(T a, T b, float t)
 {
-	return a * (1 - t) + b * t;
+	//return a * (1 - t) + b * t;
+	return a + (b - a) * t;
 }
 
 // Compute a "random" value at a position in a static white
@@ -42,4 +44,15 @@ float lerpAngle(float start, float end, float amount)
 {
 	float shortest_angle = ((((end - start) % (360.0 / (PI*2))) + 540.0 / (PI*2)) % (360.0 / (PI*2))) - (180.0 / (PI*2));
     return shortest_angle * amount;
+}
+
+// Compute the length of vector
+float length(Vector2f vector)
+{
+	return sqrt(vector.x * vector.x + vector.y * vector.y);
+}
+
+Vector2f normalize(Vector2f vector)
+{
+	return vector / fmax(length(vector), 1e-10f);
 }

@@ -96,7 +96,35 @@ class Map
 		return result;
 	}
 
-	//MapObject
+	MapObject[] queryObjects(Vector2f pos, float maxDistance)
+	{
+		MapObject[] query;
+		// Get a rectangle which contains the circle
+		/*int minCellX = max(0, cast(int)(pos.x - maxDistance));
+		int maxCellX = min(m_ground.length-1, cast(int)(pos.x + maxDistance + 1));
+		int minCellY = max(0, cast(int)(pos.y - maxDistance));
+		int maxCellY = min(m_ground[0].length-1, cast(int)(pos.y + maxDistance + 1));
+
+		// Iterate over all cells and take the objects in range
+		for( int x = minCellX; x < maxCellX; ++x )
+		{
+			for( int y = minCellY; y < maxCellY; ++y )
+			{
+				foreach(m_mapObjects)
+			}
+		}*/
+
+		// Brute force search
+		foreach(obj; m_mapObjects)
+		{
+			if( length(obj.position - pos) <= maxDistance )
+			{
+				query ~= obj;
+			}
+		}
+
+		return query;
+	}
 
 private:
 	// Each cell is one unit large!

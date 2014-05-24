@@ -1,9 +1,15 @@
 import genes;
 import std.random;
-import dsfml.system;
+import dsfml.graphics;
 
 class Species
 {
+	this()
+	{
+		// Choose a random color
+		m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
+	}
+
 	// updates gene priorities automatically - ONLY FOR NON-HUMAN PLAYERs!
 	void updatePriorities()
 	{
@@ -43,8 +49,11 @@ class Species
 		el.num--;
 	}
 
+	@property const(Color) color() const { return m_color; }
+
 private:
 	// todo: add used genes and their priorities
 
 	GeneUsage[Gene] m_genes;
+	Color m_color;
 }

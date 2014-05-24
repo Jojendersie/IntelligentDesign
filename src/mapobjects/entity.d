@@ -75,7 +75,7 @@ class Entity: MapObject
 	{
 		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_entityRadius), 10);
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_entityRadius, m_entityRadius));
-		circleShape.fillColor = Color.Magenta;
+		circleShape.fillColor = m_species.color;
 		window.draw(circleShape);
 	}
 
@@ -84,14 +84,30 @@ class Entity: MapObject
 	{
 		++m_numStepsSinceAngleChange;
 
+		// Find a nice target in the environment
+		float viewDistance = properties.viewDistance * m_viewDistanceMultiplier;
+		MapObject[] allVisible = map.queryObjects(position, viewDistance);
+		Vector2f targetingDirection = Vector2f(0.0f, 0.0f);
+		foreach( other; allVisible )
+		{
+			if( other != this )
+			{
+				Vector2f dir = other.position - position;
+				float attr = attraction(other);
+				targetingDirection += dir * attr;
+			}
+		}
+		//targetingDirection = normalize(targetingDirection);
+
 		// interpolate direction and move
 		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
-		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle)) * m_speedMultiplier;
+		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));
+		direction = normalize(lerp(targetingDirection, direction, m_randomWalkWeight));
 		if(map.isLand(m_position))
 			direction *= m_properties.velocityLand;
 		else
 			direction *= m_properties.velocityWater;
-		m_position += direction;
+		m_position += direction * m_speedMultiplier;
 
 		// new walk goal?
 		if(m_numStepsSinceAngleChange > m_numStepsSameWalkAim)
@@ -110,6 +126,7 @@ class Entity: MapObject
 	}
 
 	@property Properties properties() { return m_properties; }
+	@property Species species() { return m_species; }
 
 private:
 
@@ -131,6 +148,18 @@ private:
 		m_numStepsSinceAngleChange = uniform(0, m_numStepsSameWalkAim);
 	}
 
+	// Compute the attraction / repulsion from another unit.
+	// A positive value means attraction.
+	float attraction(MapObject other)
+	{
+		Entity e = cast(Entity)other;
+		if( e !is null )
+		{
+			return e.species == m_species ? 1.0f : -1.0f;
+		}
+		return 0.0f;
+	}
+
 	Properties m_properties;
 	Gene[5] m_geneSlots;
 	float m_vitality;
@@ -147,4 +176,6 @@ private:
 
 
 	enum float m_speedMultiplier = 1.0f / 60.0f;
+	enum float m_viewDistanceMultiplier = 1.0f;
+	enum float m_randomWalkWeight = 0.3f;
 }
