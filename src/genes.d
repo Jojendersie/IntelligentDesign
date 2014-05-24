@@ -16,9 +16,9 @@ class Gene
 		if( val != null ) m_properties.velocityWater	= cast(int)val.integer;
 		val = "velocityLand" in data;
 	    if( val != null ) m_properties.velocityLand		= cast(int)val.integer;
-		val = "vitatlityWater" in data;
-	    if( val != null ) m_properties.vitatlityWater	= cast(int)val.integer;
-		val = "vitatlityLand" in data;
+		val = "vitalityWater" in data;
+	    if( val != null ) m_properties.vitalityWater	= cast(int)val.integer;
+		val = "vitalityLand" in data;
 	    if( val != null ) m_properties.velocityLand		= cast(int)val.integer;
 		val = "poisonous" in data;
 	    if( val != null ) m_properties.poisonous		= cast(int)val.integer;
@@ -34,8 +34,8 @@ class Gene
 	    if( val != null ) m_properties.carnivore		= cast(int)val.integer;
 		val = "viewDistance" in data;
 	    if( val != null ) m_properties.viewDistance		= cast(int)val.integer;
-		val = "vitatlity" in data;
-		if( val != null ) m_properties.vitatlity		= cast(int)val.integer;
+		val = "vitality" in data;
+		if( val != null ) m_properties.vitality		= cast(int)val.integer;
 
 		m_priority = Vector2f(0.0f, 0.0f);
 	}

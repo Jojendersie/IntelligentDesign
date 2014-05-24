@@ -2,8 +2,8 @@ struct Properties
 {
 	int velocityWater;		// Movement factor in water
 	int velocityLand;		// Movement factor on land
-	int vitatlityWater;		// Life loss factor in water
-	int vitatlityLand;		// Life loss factor on land
+	int vitalityWater;		// Life loss factor in water
+	int vitalityLand;		// Life loss factor on land
 	int poisonous;			// Damage value if eaten
 	int poisonResistence;	// Resistence value if eating
 	int spiky;				// Damaga value if eaten
@@ -11,42 +11,44 @@ struct Properties
 	int herbivore;			// Can eat plants
 	int carnivore;			// Can eat other animals
 	int viewDistance;		// How far can this unit see
-	int vitatlity;			// Consumption ot gain of vitatlity
+	int vitality;			// Consumption ot gain of vitality
 
 	Properties opBinary(string op)(Properties rhs)
 	{
-		Properties result;
+		Properties results;
 		static if (op == "+")
 		{
-			result.velocityWater = velocityWater + rhs.velocityWater;
-			result.velocityLand = velocityLand + rhs.velocityLand;
-			result.damageWater = damageWater + rhs.damageWater;
-			result.damageLand = damageLand + rhs.damageLand;
-			result.poisonous = poisonous + rhs.poisonous;
-			result.poisonResistence = poisonResistence + rhs.poisonResistence;
-			result.spiky = spiky + rhs.spiky;
-			result.spikeResistence = spikeResistence + rhs.spikeResistence;
-			result.herbivore = herbivore + rhs.herbivore;
-			result.carnivore = carnivore + rhs.carnivore;
-			result.viewDistance = viewDistance + rhs.viewDistance;
+			results.velocityWater = velocityWater + rhs.velocityWater;
+			results.velocityLand = velocityLand + rhs.velocityLand;
+			results.vitalityWater = vitalityWater + rhs.vitalityWater;
+			results.vitalityLand = vitalityLand + rhs.vitalityLand;
+			results.poisonous = poisonous + rhs.poisonous;
+			results.poisonResistence = poisonResistence + rhs.poisonResistence;
+			results.spiky = spiky + rhs.spiky;
+			results.spikeResistence = spikeResistence + rhs.spikeResistence;
+			results.herbivore = herbivore + rhs.herbivore;
+			results.carnivore = carnivore + rhs.carnivore;
+			results.viewDistance = viewDistance + rhs.viewDistance;
+			results.vitality = vitality + rhs.vitality;
 		}
 		else static if (op == "-")
 		{
-			result.velocityWater = velocityWater - rhs.velocityWater;
-			result.velocityLand = velocityLand - rhs.velocityLand;
-			result.damageWater = damageWater - rhs.damageWater;
-			result.damageLand = damageLand - rhs.damageLand;
-			result.poisonous = poisonous - rhs.poisonous;
-			result.poisonResistence = poisonResistence - rhs.poisonResistence;
-			result.spiky = spiky - rhs.spiky;
-			result.spikeResistence = spikeResistence - rhs.spikeResistence;
-			result.herbivore = herbivore - rhs.herbivore;
-			result.carnivore = carnivore - rhs.carnivore;
-			result.viewDistance = viewDistance - rhs.viewDistance;
+			results.velocityWater = velocityWater - rhs.velocityWater;
+			results.velocityLand = velocityLand - rhs.velocityLand;
+			results.vitalityWater = vitalityWater - rhs.vitalityWater;
+			results.vitalityLand = vitalityLand - rhs.vitalityLand;
+			results.poisonous = poisonous - rhs.poisonous;
+			results.poisonResistence = poisonResistence - rhs.poisonResistence;
+			results.spiky = spiky - rhs.spiky;
+			results.spikeResistence = spikeResistence - rhs.spikeResistence;
+			results.herbivore = herbivore - rhs.herbivore;
+			results.carnivore = carnivore - rhs.carnivore;
+			results.viewDistance = viewDistance - rhs.viewDistance;
+			results.vitality = vitality - rhs.vitality;
 		}
 		else
 			static assert(0, "Operator "~op~" not implemented");
 
-		return result;
+		return results;
 	}
 }

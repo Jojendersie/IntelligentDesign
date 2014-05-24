@@ -5,8 +5,8 @@
 		    "image": "zero.png",
 		    "velocityWater": 1,
 	        "velocityLand": 1,
-	        "vitatlityWater": -2,
-	        "vitatlityLand": -2,
+	        "vitalityWater": -2,
+	        "vitalityLand": -2,
 	        "poisonous": 0,
 	        "poisonResistence": 0,
 	        "spiky": 0,
@@ -14,13 +14,13 @@
 	        "herbivore": 1,
 	        "carnivore": 1,
 	        "viewDistance": 3,
-		    "vitatlity": -1
+		    "vitality": -1
 		},
 	    {
             "name": "Legs",
 		    "image": "leg.png",
 	        "velocityLand": 3,
-		    "vitatlity": -2
+		    "vitality": -2
 		}
     ]
 }

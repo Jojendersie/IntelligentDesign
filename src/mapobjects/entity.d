@@ -7,10 +7,22 @@ import dsfml.graphics;
 
 class Entity: MapObject
 {
-	this(Species species, Vector2f position)
+	this(Species species, Vector2f position, ref Gene[5] genes)
 	{
 		m_species = species;
 		m_position = position;
+		m_geneSlots = genes;
+
+		// todo report genes to species
+	}
+
+	this(Entity parent0, Entity parent1)
+	{
+	}
+
+	~this()
+	{
+		// todo report deleted genes
 	}
 
 	// Get one of the N genes
@@ -36,6 +48,13 @@ class Entity: MapObject
 	@property Properties properties() { return m_properties; }
 
 private:
+
+	void calculatePropertiesFromGenes()
+	{
+		foreach(gene; m_geneSlots)
+			m_properties = m_properties + gene.properties;
+	}
+
 	Properties m_properties;
 	Gene[5] m_geneSlots;
 	float m_vitality;

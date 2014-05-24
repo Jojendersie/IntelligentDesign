@@ -2,6 +2,7 @@ import utils;
 import screenmanager;
 import mapobjects;
 import species;
+import genes;
 
 import dsfml.graphics;
 
@@ -11,10 +12,10 @@ import std.random;
 class Map
 {
 	// Initializes entites for every species
-	this(Species[] species)
+	this(Species[] species, Gene[string] globalGenePool)
 	{
 		generateGround();
-		startupSpeciesPopulate(species);
+		startupSpeciesPopulate(species, globalGenePool);
 	}
 
 	void render(RenderWindow window, const ScreenManager screenManager)
@@ -99,9 +100,10 @@ private:
 	}
 
 	// creates
-	void startupSpeciesPopulate(Species[] species)
+	void startupSpeciesPopulate(Species[] species, Gene[string] globalGenePool)
 	{
 		auto rnd = Xorshift(unpredictableSeed());
+		Gene[5] randomGenes;
 		foreach(s; species)
 		{
 			uint numEntities = uniform(m_startPopMinNum, m_startPopMaxNum, rnd);
@@ -115,7 +117,12 @@ private:
 				Vector2f entityPos = populationCenter;
 				entityPos.x += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 				entityPos.y += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
-				m_mapObjects ~= new Entity(s, entityPos);
+
+				// choose 5 random genese
+				for(int gene=0; gene<randomGenes.length; ++gene)
+					randomGenes[gene] = globalGenePool.values[uniform(0, globalGenePool.length, rnd)];
+
+				m_mapObjects ~= new Entity(s, entityPos, randomGenes);
 			}
 		}
 	}
