@@ -83,7 +83,8 @@ class Entity: MapObject
 	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
 		float radius = getRadius();
-		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(radius), 10);
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(radius),
+										   m_species.isPlayer ? 3 : 10);
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(radius, m_entityRadius));
 		circleShape.fillColor = m_species.color;
 		window.draw(circleShape);

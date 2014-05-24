@@ -19,7 +19,7 @@ class Game
 		loadGenes();
 
 		for(int i=0; i<m_allSpecies.length; ++i)
-			m_allSpecies[i] = new Species();
+			m_allSpecies[i] = new Species(i==0);
 		m_player = new Player(m_allSpecies[0]);
 
 		m_map = new Map(m_allSpecies, m_globalGenePool);

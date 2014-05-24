@@ -4,10 +4,11 @@ import dsfml.graphics;
 
 class Species
 {
-	this()
+	this(bool isPlayer)
 	{
 		// Choose a random color
 		m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
+		m_isPlayer = isPlayer;
 	}
 
 	// updates gene priorities automatically - ONLY FOR NON-HUMAN PLAYERs!
@@ -50,6 +51,7 @@ class Species
 	}
 
 	@property const(Color) color() const { return m_color; }
+	@property const(bool) isPlayer() const { return m_isPlayer; }
 
 	Vector2f origin;	// Spawn center
 private:
@@ -57,4 +59,5 @@ private:
 
 	GeneUsage[Gene] m_genes;
 	Color m_color;
+	bool m_isPlayer;
 }
