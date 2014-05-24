@@ -10,7 +10,7 @@ class GUI
 		auto rectangleShape = new RectangleShape();
 
 		// right bar
-		rectangleShape.fillColor = Color.Blue;
+		rectangleShape.fillColor = species.color;
 		rectangleShape.position = Vector2f(window.size.x - screenManager.geneBarWidth, 0);
 		rectangleShape.size = Vector2f(screenManager.geneBarWidth, window.size.y);
 		window.draw(rectangleShape);

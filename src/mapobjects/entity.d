@@ -3,6 +3,7 @@ import genes;
 import properties;
 import species;
 import utils;
+import plant;
 
 import dsfml.graphics;
 import std.math;
@@ -169,10 +170,19 @@ private:
 	// A positive value means attraction.
 	float attraction(MapObject other)
 	{
+		// Smoothstep
+		float likesSex = (m_vitality - 100.0f) * 0.1f;
+		likesSex = fmax(0.0f, fmin(1.0f, likesSex));
+		likesSex *= likesSex * (3 - 2 * likesSex);
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
-			return e.species == m_species ? 1.0f : -1.0f;
+			return e.species == m_species ? likesSex : -1.0f;
+		}
+		Plant p = cast(Plant)other;
+		if( p !is null )
+		{
+			return p.getEnergy() * (1.0f - likesSex);
 		}
 		return 0.0f;
 	}
@@ -195,5 +205,5 @@ private:
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
-	enum float m_vitalityLossFactor = 0.1f;
+	enum float m_vitalityLossFactor = 0.01f;
 }
