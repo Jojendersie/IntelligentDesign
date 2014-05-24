@@ -1,7 +1,6 @@
 import dsfml.graphics;
 import map;
 import screenmanager;
-import player;
 import gui;
 import species;
 
@@ -20,9 +19,10 @@ class Game
 
 		for(int i=0; i<m_allSpecies.length; ++i)
 			m_allSpecies[i] = new Species(i==0);
-		m_player = new Player(m_allSpecies[0]);
+		m_playerSpecies = m_allSpecies[0];
 
 		m_map = new Map(m_allSpecies, m_globalGenePool);
+		m_gui = new GUI();
 
 		// Zoom to player
 		Vector2f centering = m_screenManager.resolution - Vector2f(m_screenManager.geneBarWidth,
@@ -37,13 +37,13 @@ class Game
 		m_screenManager.resolution = Vector2f(window.size().x, window.size().y); // brain-dead simple: If the resolution change, our game can handle this ;D
 		
 		m_map.render(window, m_screenManager);
-		m_gui.render(window, m_screenManager, m_player.species);
+		m_gui.render(window, m_screenManager, m_playerSpecies);
 	}
 
 	void update(RenderWindow window)
 	{
-		m_player.update(m_screenManager, window);
 		m_map.update();
+		m_gui.update(m_screenManager, window, m_playerSpecies);
 	}
 
 	void loadGenes()
@@ -68,8 +68,10 @@ class Game
 private:
 	ScreenManager m_screenManager;
 	Map m_map;
+
 	Species[] m_allSpecies = new Species[5];
+	Species m_playerSpecies;
+
 	Gene[string] m_globalGenePool;
-	Player m_player;
-	GUI m_gui = new GUI();
+	GUI m_gui;
 }

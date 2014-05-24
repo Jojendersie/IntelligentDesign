@@ -12,7 +12,7 @@
   <quiet>0</quiet>
   <verbose>0</verbose>
   <vtls>0</vtls>
-  <symdebug>2</symdebug>
+  <symdebug>1</symdebug>
   <optimize>0</optimize>
   <cpu>0</cpu>
   <isX86_64>0</isX86_64>
@@ -201,7 +201,6 @@
   <File path="src\gui.d" />
   <File path="main.d" />
   <File path="src\map.d" />
-  <File path="src\player.d" />
   <File path="src\properties.d" />
   <File path="src\screenmanager.d" />
   <File path="src\species.d" />
