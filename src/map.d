@@ -15,6 +15,13 @@ class Map
 	// Initializes entites for every species
 	this(Species[] species, Gene[string] globalGenePool)
 	{
+		m_groundTexture = new Texture();
+		m_groundTexture.create(m_ground.length, m_ground[0].length);
+		m_groundTexture.setSmooth(true);
+		m_groundTexture.setRepeated(false);
+		m_groundSprite = new Sprite();
+		m_groundSprite.setTexture(m_groundTexture);
+
 		generateGround();
 		startupSpeciesPopulate(species, globalGenePool);
 
@@ -29,28 +36,15 @@ class Map
 	void render(RenderWindow window, const ScreenManager screenManager)
 	{
 		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCoor;
-		immutable Vector2i visibleGameArea_UnitsMin = Vector2i(max(cast(int)visibleGameArea.left, 0), max(cast(int)visibleGameArea.top, 0));
-		immutable Vector2i visibleGameArea_UnitsMax = Vector2i(min(cast(uint)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length-1),
-															   min(cast(uint)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length-1));
+		immutable Vector2f visibleGameArea_UnitsMin = Vector2f(max(cast(float)visibleGameArea.left, 0.0f), max(cast(float)visibleGameArea.top, 0.0f));
+		immutable Vector2f visibleGameArea_UnitsMax = Vector2f(min(cast(float)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length-1),
+															   min(cast(float)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length-1));
 
-		// todo: Use a custom "vertex buffer"
-		// todo: set each corner to a a sensible value to get bilinear filtering for FREEEEE :)
 		immutable float cellSize = screenManager.relativeLengthToScreenLength(1.0f);
-		auto rectangleShape = new RectangleShape(Vector2f(cellSize,cellSize));
-
-		for( int x = visibleGameArea_UnitsMin.x; x < visibleGameArea_UnitsMax.x; ++x )
-		{
-			for( int y = visibleGameArea_UnitsMin.y; y < visibleGameArea_UnitsMax.y; ++y )
-			{
-				ubyte greyVal = cast(ubyte)(127.5f * m_ground[x][y] + 127.5f);
-				if( isLand(Vector2f(x, y)) )
-					rectangleShape.fillColor = Color(greyVal/2, greyVal*3/4, 0);
-				else 
-					rectangleShape.fillColor = Color(0, 0, greyVal);
-				rectangleShape.position = screenManager.relativeCoorToScreenCoor(Vector2f(x,y));
-				window.draw(rectangleShape);
-			}
-		}
+		m_groundSprite.position = screenManager.relativeCoorToScreenCoor(Vector2f(0.0f, 0.0f));
+		m_groundSprite.scale = Vector2f(screenManager.relativeLengthToScreenLength(m_ground.length) / m_groundTexture.getSize().x, 
+										screenManager.relativeLengthToScreenLength(m_ground[0].length) / m_groundTexture.getSize().y);
+		window.draw(m_groundSprite);
 
 		// draw all entites
 		foreach(mapObject; m_mapObjects)
@@ -80,6 +74,13 @@ class Map
 		if( pos.x < 0.0f || pos.x >= (m_ground.length-1) ) return false;
 		if( pos.y < 0.0f || pos.y >= (m_ground[0].length-1) ) return false;
 		return sampleGround(pos) > 0.0f;
+	}
+
+	bool isLand(Vector2i pos) const
+	{
+		if( pos.x < 0 || pos.x >= m_ground.length ) return false;
+		if( pos.y < 0 || pos.y >= m_ground[0].length ) return false;
+		return m_ground[pos.x][pos.y] > 0.0f;
 	}
 
 	bool isWater(Vector2f pos) const
@@ -182,6 +183,8 @@ private:
 	// Each cell is one unit large!
 	float[100][100] m_ground;
 	MapObject[] m_mapObjects;
+	Texture m_groundTexture;
+	Sprite m_groundSprite;
 
 	// Use bilinear sampling of a height map to get smoother borders
 	float sampleGround(Vector2f pos) const
@@ -215,6 +218,31 @@ private:
 				m_ground[x][y] = value;
 			}
 		}
+
+		updateGroundTexture();
+	}
+
+	void updateGroundTexture()
+	{
+		ubyte[] textureValues = new ubyte[m_ground.length * m_ground[0].length * 4];
+		for( int x = 0; x < m_ground.length; ++x )
+		{
+			for( int y = 0; y < m_ground[0].length; ++y )
+			{
+				ubyte greyVal = cast(ubyte)(127.5f * m_ground[x][y] + 127.5f);
+				Color color;
+				if( isLand(Vector2i(x, y)) )
+					color = Color(greyVal/2, greyVal*3/4, 0);
+				else 
+					color = Color(0, 0, greyVal);
+
+				textureValues[(y * m_ground[0].length + x) * 4 + 0] = color.r;
+				textureValues[(y * m_ground[0].length + x) * 4 + 1] = color.g;
+				textureValues[(y * m_ground[0].length + x) * 4 + 2] = color.b;
+				textureValues[(y * m_ground[0].length + x) * 4 + 3] = color.a;
+			}
+		}
+		m_groundTexture.updateFromPixels(textureValues, m_ground.length, m_ground[0].length, 0, 0);
 	}
 
 	// creates
