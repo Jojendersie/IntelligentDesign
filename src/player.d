@@ -39,7 +39,7 @@ class Player
 		if(m_currentDraggingGene != null)
 		{
 			m_currentDraggingGene.priority.x -= cast(float)dirPixel.x / (screenManager.geneBarWidth - screenManager.geneDisplaySize);
-			m_currentDraggingGene.priority.y -= cast(float)dirPixel.y / (screenManager.resolution.y - screenManager.geneDisplaySize);
+			m_currentDraggingGene.priority.y += cast(float)dirPixel.y / (screenManager.resolution.y - screenManager.geneDisplaySize);
 
 			if(m_currentDraggingGene.priority.x < 0)
 				m_currentDraggingGene.priority.x = 0.0f;

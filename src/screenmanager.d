@@ -28,7 +28,7 @@ class ScreenManager
 	Vector2f getGeneDisplayScreenPos(Vector2f usagePriority) const
 	{
 		return Vector2f(usagePriority.x * (geneBarWidth - geneDisplaySize) + geneBarX,
-						usagePriority.y * (geneBarHeight - geneDisplaySize));
+						(1.0f - usagePriority.y) * (geneBarHeight - geneDisplaySize));
 	}
 
     float relativeLengthToScreenLength(float l) const

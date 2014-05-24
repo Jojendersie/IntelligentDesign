@@ -6,8 +6,7 @@ import utils;
 
 import dsfml.graphics;
 import std.math;
-import std.random;
-
+import std.random; 
 
 class Entity: MapObject
 {
@@ -16,14 +15,47 @@ class Entity: MapObject
 		this();
 		m_species = species;
 		m_position = position;
-		overwriteGenes(genes);
+		m_geneSlots = genes;
+		updatePropertiesAndReportGenes();
 	}
 
-	this(Entity parent0, Entity parent1)
+	this(Entity parent0, Entity parent1, Gene[string] globalGenePool)
 	{
+		assert(parent0.m_species == parent1.m_species);
+		m_species = parent0.m_species;
+		m_position = (parent0.position + parent1.position) / 2;
 		this();
-		// todo inheritance mechanism
-		overwriteGenes(parent0.m_geneSlots);
+		
+		// fill 4 genes by inheritance
+		Gene[] parentGenePool = parent0.m_geneSlots ~ parent1.m_geneSlots;
+		float totalPriority = 0.0f;
+		for(int pgene=0; pgene<parentGenePool.length; ++pgene)
+			totalPriority += m_species.genes()[parentGenePool[pgene]].priority.y;
+		for(int i=0; i<m_geneSlots.length; ++i)
+		{
+			float choosenGene = uniform(0.0f, totalPriority);
+
+			float currentPrioritySum = 0.0f;
+			for(int pgene=0; pgene<parentGenePool.length; ++pgene)
+			{
+				if(parentGenePool[pgene] is null)
+					continue;
+				float currentPrio = m_species.genes()[parentGenePool[pgene]].priority.y;
+				currentPrioritySum += currentPrio;
+				if(currentPrioritySum > choosenGene)
+				{
+					m_geneSlots[i] = parentGenePool[pgene];
+					parentGenePool[pgene] = null;
+					totalPriority -= currentPrio;
+					break;
+				}
+			}
+		}
+
+		// choose last gene randomly
+		m_geneSlots[m_geneSlots.length-1] = globalGenePool.values()[uniform(0, globalGenePool.length)];
+
+		updatePropertiesAndReportGenes();
 	}
 
 	~this()
@@ -81,10 +113,9 @@ class Entity: MapObject
 
 private:
 
-	void overwriteGenes(ref Gene[5] genes)
+	void updatePropertiesAndReportGenes()
 	{
 		m_properties = Gene.zeroGene.properties;
-		m_geneSlots = genes;
 		foreach(gene; m_geneSlots)
 		{
 			m_species.increaseGene(gene);
