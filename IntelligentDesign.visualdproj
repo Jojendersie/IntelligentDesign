@@ -141,7 +141,7 @@
   <compiler>0</compiler>
   <otherDMD>0</otherDMD>
   <program>$(DMDInstallDir)windows\bin\dmd.exe</program>
-  <imppath>dependencies\dsfml2\dsfml-system.lib</imppath>
+  <imppath>dependencies/dsfml2</imppath>
   <fileImppath />
   <outdir>$(ConfigurationName)</outdir>
   <objdir>$(OutDir)</objdir>
@@ -177,8 +177,8 @@
   <cv2pdbOptions />
   <objfiles />
   <linkswitches />
-  <libfiles />
-  <libpaths />
+  <libfiles>dsfml-audio.lib;dsfml-graphics.lib;dsfml-system.lib;dsfml-window.lib;dsfml-network.lib;dsfml-audio-2.lib;dsfml-graphics-2.lib;dsfml-system-2.lib;dsfml-window-2.lib;dsfml-network-2.lib</libfiles>
+  <libpaths>dependencies\dsfml2</libpaths>
   <deffile />
   <resfile />
   <exefile>$(OutDir)\$(ProjectName).exe</exefile>
