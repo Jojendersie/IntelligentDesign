@@ -65,13 +65,17 @@ class Game
 		}
 	}
 
+	static Gene[string] globalGenePool()
+	{
+		return m_globalGenePool;
+	}
+
 private:
 	ScreenManager m_screenManager;
 	Map m_map;
 
 	Species[] m_allSpecies = new Species[5];
 	Species m_playerSpecies;
-
-	Gene[string] m_globalGenePool;
+	static Gene[string] m_globalGenePool;
 	GUI m_gui;
 }

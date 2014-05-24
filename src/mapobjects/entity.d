@@ -4,6 +4,7 @@ import properties;
 import species;
 import utils;
 import plant;
+import game;
 
 import dsfml.graphics;
 import std.math;
@@ -21,7 +22,7 @@ class Entity: MapObject
 		updatePropertiesAndReportGenes();
 	}
 
-	this(Entity parent0, Entity parent1, Gene[string] globalGenePool)
+	this(Entity parent0, Entity parent1)
 	{
 		assert(parent0.m_species == parent1.m_species);
 		m_species = parent0.m_species;
@@ -60,7 +61,7 @@ class Entity: MapObject
 		}
 
 		// choose last gene randomly
-		m_geneSlots[m_geneSlots.length-1] = globalGenePool.values()[uniform(0, globalGenePool.length)];
+		m_geneSlots[m_geneSlots.length-1] = Game.globalGenePool().values()[uniform(0, Game.globalGenePool().length)];
 
 		updatePropertiesAndReportGenes();
 	}
@@ -87,6 +88,11 @@ class Entity: MapObject
 										   m_species.isPlayer ? 3 : 10);
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(radius, m_entityRadius));
 		circleShape.fillColor = m_species.color;
+		if( canHaveSex() )
+		{
+			circleShape.outlineColor = m_species.color * 1.2f;
+			circleShape.outlineThickness = 2.5f;
+		}
 		window.draw(circleShape);
 	}
 
@@ -122,11 +128,20 @@ class Entity: MapObject
 				// Eat or Sex?
 				if( distSq <= 0.1f )
 				{
-					float foodValue = getFootValue(other);
-					if( foodValue > 0.0f )
+					Entity e = cast(Entity)other;
+					if( e !is null )
 					{
-						m_vitality += foodValue;
-						other.removed = true;
+						if( e.canHaveSex() && canHaveSex() )
+						{
+							map.addObject( new Entity(this, e) );
+						}
+					} else {
+						float foodValue = getFootValue(other);
+						if( foodValue > 0.0f )
+						{
+							m_vitality += foodValue;
+							other.removed = true;
+						}
 					}
 				}
 			}
@@ -161,6 +176,8 @@ class Entity: MapObject
 	@property Properties properties() { return m_properties; }
 	@property Species species() { return m_species; }
 
+	bool canHaveSex() const { return m_vitality > m_sexThreshold; }
+
 private:
 
 	void updatePropertiesAndReportGenes()
@@ -193,7 +210,7 @@ private:
 		if( e !is null )
 		{
 			if( e.species != m_species ) return -1.0f;	// Enemy
-			return (e.m_vitality > m_sexThreshold) ? likesSex : 0.0f;
+			return e.canHaveSex() ? likesSex : 0.0f;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )

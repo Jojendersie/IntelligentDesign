@@ -17,6 +17,13 @@ class Map
 	{
 		generateGround();
 		startupSpeciesPopulate(species, globalGenePool);
+
+		// Set some plants
+		for( int i = 0; i < 100; ++i )
+		{
+			m_mapObjects ~= new Plant(Vector2f(uniform(0.0f, nextDown(cast(float)m_ground.length-1)),
+											   uniform(0.0f, nextDown(cast(float)m_ground[0].length-1))));
+		}
 	}
 
 	void render(RenderWindow window, const ScreenManager screenManager)
@@ -150,6 +157,11 @@ class Map
 				m_mapObjects.popBack();
 			}
 		}
+	}
+
+	void addObject(MapObject object)
+	{
+		m_mapObjects ~= object;
 	}
 
 private:
