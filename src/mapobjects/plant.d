@@ -4,7 +4,7 @@ import std.math;
 class Plant: MapObject
 {
 	// Get older
-	override void update()
+	override void update(Map map)
 	{
 		m_age += 1.0f/60.0f;
 	}

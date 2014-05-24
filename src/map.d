@@ -49,17 +49,44 @@ class Map
 	void update()
 	{
 		foreach(mapObject; m_mapObjects)
-			mapObject.update();
+			mapObject.update(this);
 	}
 
-	bool isLand(float x, float y) const
+	bool isLand(Vector2f pos) const
 	{
-		return sampleGround(x, y) > 0.0f;
+		return sampleGround(pos) > 0.0f;
 	}
 
-	bool isWater(float x, float y) const
+	bool isWater(Vector2f pos) const
 	{
-		return sampleGround(x, y) <= 0.0f;
+		return sampleGround(pos) <= 0.0f;
+	}
+
+	// returns true if something was clamped
+	bool clampToGame(ref Vector2f pos) const
+	{
+		bool result = false;
+		if(pos.x < 0)
+		{
+			pos.x = 0.0f;
+			result = true;
+		}
+		if(pos.y < 0)
+		{
+			pos.y = 0.0f;
+			result = true;
+		}
+		if(pos.x >= m_ground.length-1)
+		{
+			pos.x = nextDown(cast(float)m_ground.length-1);
+			result = true;
+		}
+		if(pos.y >= m_ground[0].length-1)
+		{
+			pos.y = nextDown(cast(float)m_ground[0].length-1);
+			result = true;
+		}
+		return result;
 	}
 
 private:
@@ -68,12 +95,14 @@ private:
 	MapObject[] m_mapObjects;
 
 	// Use bilinear sampling of a height map to get smoother borders
-	float sampleGround(float x, float y) const
+	float sampleGround(Vector2f pos) const
 	{
-		int ix = cast(int)x;
-		int iy = cast(int)y;
-		float fx = x - ix;
-		float fy = y - iy;
+		assert(pos.x >= 0 && pos.y >= 0 && pos.y < m_ground[0].length && pos.x < m_ground.length);
+
+		int ix = cast(int)pos.x;
+		int iy = cast(int)pos.y;
+		float fx = pos.x - ix;
+		float fy = pos.y - iy;
 		assert(ix >= 0 && ix < (m_ground.length-1));
 		assert(iy >= 0 && iy < (m_ground[0].length-1));
 		return (m_ground[ix][iy] * (1.0f - fx) + m_ground[ix+1][iy] * fx) * (1.0f - fy) +

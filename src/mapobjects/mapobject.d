@@ -1,10 +1,11 @@
 public import dsfml.graphics;
 public import screenmanager;
+public import map;
 
 abstract class MapObject
 {
 	// Simulate this entity for a fixed time step size
-	abstract void update();
+	abstract void update(Map map);
 
 	abstract void render(RenderWindow window, const ScreenManager screenManager);
 

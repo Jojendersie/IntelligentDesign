@@ -1,3 +1,5 @@
+import std.math;
+
 float lerp(float a, float b, float t)
 {
 	return a * (1 - t) + b * t;
@@ -34,4 +36,10 @@ float randomAt( float x, float y, float z )
 					 lerp(randomAt(ix,iy+1,iz), randomAt(ix+1,iy+1,iz), fx), fy),
 				lerp(lerp(randomAt(ix,iy,iz+1), randomAt(ix+1,iy,iz+1), fx),
 					 lerp(randomAt(ix,iy+1,iz+1), randomAt(ix+1,iy+1,iz+1), fx), fy), fz);
+}
+
+float lerpAngle(float start, float end, float amount)
+{
+	float shortest_angle = ((((end - start) % (360.0 / (PI*2))) + 540.0 / (PI*2)) % (360.0 / (PI*2))) - (180.0 / (PI*2));
+    return shortest_angle * amount;
 }

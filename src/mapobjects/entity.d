@@ -2,14 +2,18 @@ import mapobject;
 import genes;
 import properties;
 import species;
+import utils;
 
 import dsfml.graphics;
 import std.math;
+import std.random;
+
 
 class Entity: MapObject
 {
 	this(Species species, Vector2f position, ref Gene[5] genes)
 	{
+		this();
 		m_species = species;
 		m_position = position;
 		overwriteGenes(genes);
@@ -17,6 +21,7 @@ class Entity: MapObject
 
 	this(Entity parent0, Entity parent1)
 	{
+		this();
 		// todo inheritance mechanism
 		overwriteGenes(parent0.m_geneSlots);
 	}
@@ -43,20 +48,33 @@ class Entity: MapObject
 	}
 
 	// Observe the environment search a target and go one step.
-	override void update()
+	override void update(Map map)
 	{
-	/*	++m_numStepsSinceAngleChange;
-		// new goal?
-		if(m_numStepsSinceAngleChange < m_numStepsSameWalkAim)
+		++m_numStepsSinceAngleChange;
+
+		// interpolate direction and move
+		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
+		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle)) * m_speedMultiplier;
+		if(map.isLand(m_position))
+			direction *= m_properties.velocityLand;
+		else
+			direction *= m_properties.velocityWater;
+		m_position += direction;
+
+		// new walk goal?
+		if(m_numStepsSinceAngleChange > m_numStepsSameWalkAim)
 		{
-			auto rnd = Xorshift(unpredictableSeed());
 			m_numStepsSinceAngleChange = 0;
 			m_aimedWalkAngleLast = m_aimedWalkAngleCurrent;
-			m_aimedWalkAngleCurrent = uniform(0, PI);
+			m_aimedWalkAngleCurrent = uniform(0, 2 * PI);
 		}
-		// interpolate direction
-		float currentAngle = 
-		Vector2f direction = Vector2f(); */
+
+		// Border handling
+		if(map.clampToGame(m_position))
+		{
+			m_aimedWalkAngleLast = uniform(0, 2 * PI);
+			m_aimedWalkAngleCurrent = uniform(0, 2 * PI);
+		}
 	}
 
 	@property Properties properties() { return m_properties; }
@@ -74,6 +92,14 @@ private:
 		}
 	}
 
+	// shared constructor part
+	this()
+	{
+		m_aimedWalkAngleLast = uniform(0, 2 * PI);
+		m_aimedWalkAngleCurrent = uniform(0, 2 * PI);
+		m_numStepsSinceAngleChange = uniform(0, m_numStepsSameWalkAim);
+	}
+
 	Properties m_properties;
 	Gene[5] m_geneSlots;
 	float m_vitality;
@@ -83,6 +109,11 @@ private:
 
 	float m_aimedWalkAngleLast;
 	float m_aimedWalkAngleCurrent;
-	int m_numStepsSinceAngleChange = 20;
-	enum int m_numStepsSameWalkAim = 20;
+	int m_numStepsSinceAngleChange;
+
+	enum int m_numStepsSameWalkAim = 100;
+
+
+
+	enum float m_speedMultiplier = 1.0f / 60.0f;
 }
