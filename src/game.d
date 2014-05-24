@@ -44,11 +44,13 @@ class Game
 	void update(RenderWindow window)
 	{
 		m_map.update();
-		m_gui.update(m_screenManager, window, m_playerSpecies);
+		
 
 		MapObject hoverObject = m_map.queryObjectExact(m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window)));
-		if(hoverObject !is null)
-			m_gui.displayObjectInfo(hoverObject);
+		if(Mouse.isButtonPressed(Mouse.Button.Left))
+			m_gui.updateHoverObject(hoverObject);
+
+		m_gui.update(m_screenManager, window, m_playerSpecies);
 	}
 
 	void loadGenes()

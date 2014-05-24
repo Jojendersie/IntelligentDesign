@@ -4,6 +4,7 @@ import species;
 import genes;
 import std.stdio;
 import std.conv;
+import std.algorithm;
 import mapobjects;
 
 class GUI
@@ -91,12 +92,15 @@ class GUI
 		// info text
 		m_messageTopic.position = (Vector2f(5, screenManager.resolution.y - 50));
 		m_messageInfo.position = (Vector2f(160, screenManager.resolution.y - 42));
-		if(hoveredGene != null)
+		if(hoveredGene !is null)
 		{
 			m_messageTopic.setString(to!dstring(hoveredGene.name ~ ":"));
 			m_messageInfo.setString(to!dstring(hoveredGene.properties.getTextDescription()));
+
+			// clear hovered object!
+			m_hoveredObject = null;
 		}
-		else
+		else if(m_hoveredObject is null)
 		{
 			m_messageTopic.setString(""d);
 			m_messageInfo.setString(""d);
@@ -134,12 +138,33 @@ class GUI
 			sprite.position = screenManager.getGeneDisplayScreenPos(usage.priority);
 			sprite.scale = Vector2f(1.0f, 1.0f);
 			sprite.color = (usage.num > 0 ? Color.White : Color(100,100,100,100));
+
+			// mark if hovered! 
+			if(cast(Entity)m_hoveredObject !is null)
+			{
+				Entity entity = cast(Entity)m_hoveredObject;
+
+				foreach(entityGene; entity.geneSlots)
+				{
+					if(entityGene == gene)
+					{
+						rectangleShape.fillColor = Color.Yellow;
+						rectangleShape.position = sprite.position - Vector2f(5.0f, 5.0f);
+						rectangleShape.size = Vector2f(screenManager.geneDisplaySize + 10, screenManager.geneDisplaySize + 10);
+						window.draw(rectangleShape);
+						break;
+					}
+				}
+			}
+
 			window.draw(sprite);
 		}
 	}
 
-	void displayObjectInfo(MapObject obj)
+	void updateHoverObject(MapObject obj)
 	{
+		m_hoveredObject = obj;
+
 		if(cast(Plant)obj !is null)
 		{
 			m_messageTopic.setString("Plant:"d);
@@ -160,6 +185,8 @@ class GUI
 
 private:
 	static immutable float m_scrollSpeed = 1.5f;
+
+	MapObject m_hoveredObject = null;
 
 	Vector2i m_lastMouseCoord;
 	Species.GeneUsage* m_currentDraggingGene = null;
