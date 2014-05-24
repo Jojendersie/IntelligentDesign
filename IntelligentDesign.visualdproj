@@ -47,7 +47,7 @@
   <compiler>0</compiler>
   <otherDMD>0</otherDMD>
   <program>$(DMDInstallDir)windows\bin\dmd.exe</program>
-  <imppath>dependencies/dsfml2</imppath>
+  <imppath>dependencies/dsfml2; src</imppath>
   <fileImppath />
   <outdir>$(ConfigurationName)</outdir>
   <objdir>$(OutDir)</objdir>
@@ -189,18 +189,22 @@
   <filesToClean>*.obj;*.cmd;*.build;*.json;*.dep</filesToClean>
  </Config>
  <Folder name="IntelligentDesign">
-  <File path="src\entity.d" />
+  <Folder name="mapobjects">
+   <File path="src\mapobjects\entity.d" />
+   <File path="src\mapobjects\hormon.d" />
+   <File path="src\mapobjects\mapobject.d" />
+   <File path="src\mapobjects\package.d" />
+   <File path="src\mapobjects\plant.d" />
+  </Folder>
   <File path="src\game.d" />
   <File path="src\genes.d" />
   <File path="src\gui.d" />
-  <File path="src\hormon.d" />
   <File path="main.d" />
   <File path="src\map.d" />
-  <File path="src\mapobject.d" />
-  <File path="src\plant.d" />
   <File path="src\player.d" />
   <File path="src\properties.d" />
   <File path="src\screenmanager.d" />
+  <File path="src\species.d" />
   <File path="src\utils.d" />
  </Folder>
 </DProject>

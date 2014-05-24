@@ -3,6 +3,8 @@ import map;
 import screenmanager;
 import player;
 import gui;
+import species;
+
 import std.file;
 import std.json;
 import std.conv;
@@ -15,6 +17,12 @@ class Game
 	{
 		m_screenManager = new ScreenManager(Vector2f(window.size().x, window.size().y));
 		loadGenes();
+
+		for(int i=0; i<m_allSpecies.length; ++i)
+			m_allSpecies[i] = new Species();
+		m_player = new Player(m_allSpecies[0]);
+
+		m_map = new Map(m_allSpecies);
 	}
 
 	void render(RenderWindow window)
@@ -47,8 +55,9 @@ class Game
 
 private:
 	ScreenManager m_screenManager;
-	Map m_map = new Map();
+	Map m_map;
+	Species[] m_allSpecies = new Species[5];
 	Gene[string] globalGenePool;
-	Player m_player = new Player();
+	Player m_player;
 	GUI m_gui = new GUI();
 }

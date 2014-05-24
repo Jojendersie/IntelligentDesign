@@ -1,14 +1,20 @@
 import utils;
 import screenmanager;
+import mapobjects;
+import species;
+
 import dsfml.graphics;
 
 import std.algorithm;
+import std.random;
 
 class Map
 {
-	this()
+	// Initializes entites for every species
+	this(Species[] species)
 	{
 		generateGround();
+		startupSpeciesPopulate(species);
 	}
 
 	void render(RenderWindow window, const ScreenManager screenManager)
@@ -35,12 +41,12 @@ class Map
 		}
 	}
 
-	bool isLand(float x, float y)
+	bool isLand(float x, float y) const
 	{
 		return sampleGround(x, y) > 0.0f;
 	}
 
-	bool isWater(float x, float y)
+	bool isWater(float x, float y) const
 	{
 		return sampleGround(x, y) <= 0.0f;
 	}
@@ -48,25 +54,26 @@ class Map
 private:
 	// Each cell is one unit large!
 	float[100][100] m_ground;
+	MapObject[] m_mapObjects;
 
 	// Use bilinear sampling of a height map to get smoother borders
-	float sampleGround(float x, float y)
+	float sampleGround(float x, float y) const
 	{
 		int ix = cast(int)x;
 		int iy = cast(int)y;
 		float fx = x - ix;
 		float fy = y - iy;
-		assert(ix >= 0 && ix < 99);
-		assert(iy >= 0 && iy < 99);
+		assert(ix >= 0 && ix < (m_ground.length-1));
+		assert(iy >= 0 && iy < (m_ground[0].length-1));
 		return (m_ground[ix][iy] * (1.0f - fx) + m_ground[ix+1][iy] * fx) * (1.0f - fy) +
 			   (m_ground[ix][iy+1] * (1.0f - fx) + m_ground[ix+1][iy+1] * fx) * fy;
 	}
 
 	void generateGround()
 	{
-		for( int x = 0; x < 100; ++x )
+		for( int x = 0; x < m_ground.length; ++x )
 		{
-			for( int y = 0; y < 100; ++y )
+			for( int y = 0; y < m_ground[0].length; ++y )
 			{
 				// Generate a value noise value
 				float value = 0.0f;
@@ -80,4 +87,20 @@ private:
 			}
 		}
 	}
+
+	// creates
+	void startupSpeciesPopulate(Species[] species)
+	{
+		auto rnd = Xorshift(unpredictableSeed());
+		foreach(s; species)
+		{
+			uint numEntities = uniform(m_minNum, m_maxNum, rnd);
+			for(int i=0; i<numEntities; ++i)
+				m_mapObjects ~= new Entity(s);
+		}
+	}
+
+	enum uint m_minNum = 10;
+	enum uint m_maxNum = 20;
+
 }

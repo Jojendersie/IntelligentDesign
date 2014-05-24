@@ -4,9 +4,13 @@ import std.math;
 class Plant: MapObject
 {
 	// Get older
-	void update()
+	override void update()
 	{
 		m_age += 1.0f/60.0f;
+	}
+
+	override void draw(RenderWindow window, const ScreenManager screenManager)
+	{
 	}
 
 	float getEnergy()
