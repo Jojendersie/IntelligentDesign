@@ -63,8 +63,21 @@ class ScreenManager
 	@property uint geneBarX() const { return cast(uint)(m_resolution.x - geneBarWidth); }
 	@property uint geneBarHeight() const { return cast(uint)(m_resolution.y - lowerBarHeight); }
 
+	void zoom(int deltaZoom)
+	{
+		int newPixelsPerUnit = m_pixelsPerUnit;
+		newPixelsPerUnit += deltaZoom;
+		newPixelsPerUnit = cast(int)fmax(newPixelsPerUnit, 15);
+		newPixelsPerUnit = cast(int)fmin(newPixelsPerUnit, 80);
+
+		int actualZoomChange = (newPixelsPerUnit - m_pixelsPerUnit) * m_pixelsPerUnit;
+		m_cameraPosition += screenDirToRelativeDir(Vector2i(actualZoomChange,actualZoomChange));
+
+		m_pixelsPerUnit = newPixelsPerUnit;
+	}
+
 private:
-	enum uint m_pixelsPerUnit = 20;
+	int m_pixelsPerUnit = 20;
 
 	Vector2f m_resolution;
 

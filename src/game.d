@@ -65,6 +65,11 @@ class Game
 		}
 	}
 
+	void onMouseWheelMoved(int mouseWheelDelta)
+	{
+		m_screenManager.zoom(mouseWheelDelta);
+	}
+
 	static Gene[string] globalGenePool()
 	{
 		return m_globalGenePool;

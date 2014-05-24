@@ -33,6 +33,10 @@ void main(string[] args)
 				// overwrite the normal view behaviour - maybe the whole not-using-the-sfml-view was a bad idea...
 				window.view = new View(FloatRect(0, 0, window.size.x, window.size.y));
 			}
+			else if (event.type == event.EventType.MouseWheelMoved)
+			{
+				game.onMouseWheelMoved(event.mouseWheel.delta);
+			}
 		}
 
 		game.update(window);
