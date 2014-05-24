@@ -23,7 +23,7 @@ class Entity: MapObject
 	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
 		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_entityRadius), 10);
-		circleShape.position = screenManager.relativeCorToScreenCor(m_position - Vector2f(m_entityRadius, m_entityRadius));
+		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_entityRadius, m_entityRadius));
 		circleShape.fillColor = Color.Magenta;
 		window.draw(circleShape);
 	}

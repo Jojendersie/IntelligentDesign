@@ -10,19 +10,19 @@ class ScreenManager
 		m_cameraPosition = Vector2f(0.0f, 0.0f);
     }
 
-    Vector2f relativeCorToScreenCor(Vector2f relativeCor) const
+    Vector2f relativeCoorToScreenCoor(Vector2f relativeCoor) const
     {
-        return (relativeCor - m_cameraPosition) * m_pixelsPerUnit;
+        return (relativeCoor - m_cameraPosition) * m_pixelsPerUnit;
     }
 
-    Vector2f screenCorToRelativeCor(Vector2f screenCor) const
+    Vector2f screenCoorToRelativeCoor(Vector2f screenCoor) const
     {
-        return screenCor / m_pixelsPerUnit + m_cameraPosition;
+        return screenCoor / m_pixelsPerUnit + m_cameraPosition;
     }
 
-	Vector2f screenDirToRelativeDir(Vector2i screenCor) const
+	Vector2f screenDirToRelativeDir(Vector2i screenCoor) const
     {
-        return Vector2f(screenCor.x, screenCor.y) / m_pixelsPerUnit;
+        return Vector2f(screenCoor.x, screenCoor.y) / m_pixelsPerUnit;
     }
 
     float relativeLengthToScreenLength(float l) const
@@ -35,14 +35,14 @@ class ScreenManager
 
 	@property void resolution(Vector2f value)			{ m_resolution = value; }
 
-	@property FloatRect visibleAreaRelativeCor() const
+	@property FloatRect visibleAreaRelativeCoor() const
 	{
-		return FloatRect(m_cameraPosition, screenCorToRelativeCor(m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight)) - m_cameraPosition );
+		return FloatRect(m_cameraPosition, screenCoorToRelativeCoor(m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight)) - m_cameraPosition );
 	}
-	@property FloatRect visibleAreaScreenCor() const
+	@property FloatRect visibleAreaScreenCoor() const
 	{
-		immutable Vector2f cameraScreenCor = relativeCorToScreenCor(m_cameraPosition);
-		return FloatRect(cameraScreenCor, m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight) - cameraScreenCor);
+		immutable Vector2f cameraScreenCoor = relativeCoorToScreenCoor(m_cameraPosition);
+		return FloatRect(cameraScreenCoor, m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight) - cameraScreenCoor);
 	}
 
 	enum uint m_leftBarWidth = 200;

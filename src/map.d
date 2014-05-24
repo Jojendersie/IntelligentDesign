@@ -19,7 +19,7 @@ class Map
 
 	void render(RenderWindow window, const ScreenManager screenManager)
 	{
-		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCor;
+		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCoor;
 		immutable Vector2i visibleGameArea_UnitsMin = Vector2i(max(cast(int)visibleGameArea.left, 0), max(cast(int)visibleGameArea.top, 0));
 		immutable Vector2i visibleGameArea_UnitsMax = Vector2i(min(cast(uint)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length),
 															   min(cast(uint)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length));
@@ -35,7 +35,7 @@ class Map
 			{
 				ubyte greyVal = cast(ubyte)(255.0f * m_ground[x][y]);
 				rectangleShape.fillColor = Color(greyVal,greyVal,greyVal);
-				rectangleShape.position = screenManager.relativeCorToScreenCor(Vector2f(x,y));
+				rectangleShape.position = screenManager.relativeCoorToScreenCoor(Vector2f(x,y));
 				window.draw(rectangleShape);
 			}
 		}
