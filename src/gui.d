@@ -29,10 +29,7 @@ class GUI
 			{
 				Sprite sprite = new Sprite(gene.texture());
 				//writeln(usage.priority.x * (screenManager.geneBarWidth - 64) + 32 + screenManager.geneBarX);
-				Vector2f pos;
-				pos.x = usage.priority.x * (screenManager.geneBarWidth - 64) + screenManager.geneBarX;
-				pos.y = usage.priority.y * (screenManager.geneBarHeight - 64);
-				sprite.position = pos;
+				sprite.position = screenManager.getGeneDisplayScreenPos(usage.priority);
 				sprite.scale = Vector2f(1.0f, 1.0f);
 				window.draw(sprite);
 			}

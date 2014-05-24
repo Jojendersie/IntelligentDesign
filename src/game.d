@@ -33,9 +33,9 @@ class Game
 		m_gui.render(window, m_screenManager, m_player.species);
 	}
 
-	void update()
+	void update(RenderWindow window)
 	{
-		m_player.update(m_screenManager);
+		m_player.update(m_screenManager, window);
 		m_map.update();
 	}
 

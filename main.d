@@ -35,7 +35,7 @@ void main(string[] args)
 			}
 		}
 
-		game.update();
+		game.update(window);
 			
 		window.clear();
 		game.render(window);

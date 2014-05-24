@@ -22,7 +22,10 @@ class Species
 		}
 	}
 
-	@property const(GeneUsage[Gene]) genes() const { return m_genes; }
+	@property const(GeneUsage[Gene]) genes() const  { return m_genes; }
+	@property GeneUsage[Gene] genes()				{ return m_genes; }
+
+
 	void increaseGene( Gene gene )
 	{
 		auto el = gene in m_genes;
