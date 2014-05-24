@@ -2,6 +2,7 @@ import utils;
 import screenmanager;
 import dsfml.graphics;
 
+import std.algorithm;
 
 class Map
 {
@@ -10,16 +11,21 @@ class Map
 		generateGround();
 	}
 
-	void render(RenderWindow window, ScreenManager screenManager)
+	void render(RenderWindow window, const ScreenManager screenManager)
 	{
-		// todo: Draw only visible cells (probably not that important if next todo is done!)
+		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCor;
+		immutable Vector2i visibleGameArea_UnitsMin = Vector2i(max(cast(int)visibleGameArea.left, 0), max(cast(int)visibleGameArea.top, 0));
+		immutable Vector2i visibleGameArea_UnitsMax = Vector2i(min(cast(uint)(visibleGameArea.left + visibleGameArea.width + 1), m_ground.length),
+															   min(cast(uint)(visibleGameArea.top + visibleGameArea.height + 1), m_ground[0].length));
+
 		// todo: Use a custom "vertex buffer"
 		// todo: set each corner to a a sensible value to get bilinear filtering for FREEEEE :)
-		float cellSize = screenManager.relativeLengthToScreenLength(1.0f);
+		immutable float cellSize = screenManager.relativeLengthToScreenLength(1.0f);
 		auto rectangleShape = new RectangleShape(Vector2f(cellSize,cellSize));
-		for( int x = 0; x < m_ground.length; ++x )
+
+		for( int x = visibleGameArea_UnitsMin.x; x < visibleGameArea_UnitsMax.x; ++x )
 		{
-			for( int y = 0; y < m_ground[0].length; ++y )
+			for( int y = visibleGameArea_UnitsMin.y; y < visibleGameArea_UnitsMax.y; ++y )
 			{
 				ubyte greyVal = cast(ubyte)(255.0f * m_ground[x][y]);
 				rectangleShape.fillColor = Color(greyVal,greyVal,greyVal);

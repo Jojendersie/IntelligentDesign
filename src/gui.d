@@ -3,7 +3,7 @@ import dsfml.graphics;
 
 class GUI
 {
-	void render(RenderWindow window, ScreenManager screenManager)
+	void render(RenderWindow window, const ScreenManager screenManager)
 	{
 		auto rectangleShape = new RectangleShape();
 
