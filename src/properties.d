@@ -58,34 +58,23 @@ struct Properties
 	{
 		char[] description;
 
-		if(velocityWater != 0)
-			description ~= "Velocity Water " ~ to!string(velocityWater) ~ " | ";
-		if(velocityLand != 0)
-			description ~= "Velocity Land " ~ to!string(velocityLand) ~ " | ";
-		if(vitalityWater != 0)
-			description ~= "Vitality Water " ~ to!string(vitalityWater) ~ " | ";
-		if(vitalityLand != 0)
-			description ~= "Vitality Land " ~ to!string(vitalityLand) ~ " | ";
+		if(velocityWater != 0 || velocityLand != 0)
+			description ~= "Velocity (Land/Water): " ~ to!string(velocityLand) ~ "/" ~ to!string(velocityWater) ~ " | ";
 
-		if(poisonous != 0)
-			description ~= "Poison Attack " ~ to!string(poisonous) ~ " | ";
-		if(poisonResistence != 0)
-			description ~= "Poison Resist. " ~ to!string(poisonResistence) ~ " | ";
+		if(vitalityLand + vitality != 0 || vitalityWater + vitality != 0)
+			description ~= "Vitality (Land/Water): " ~ to!string(vitalityLand + vitality) ~ "/" ~ to!string(vitalityWater + vitality) ~ " | ";
 
-		if(spiky != 0)
-			description ~= "Spike Attack " ~ to!string(spiky) ~ " | ";
-		if(spikeResistence != 0)
-			description ~= "Spike Resist. " ~ to!string(spikeResistence) ~ " | ";
+		if(poisonous != 0 || poisonResistence != 0)
+			description ~= "Poison (Att/Def): " ~ to!string(poisonous) ~ "/" ~ to!string(poisonResistence) ~ " | ";
 
-		if(herbivore != 0)
-			description ~= "Herbivore " ~ to!string(herbivore) ~ " | ";
-		if(carnivore != 0)
-			description ~= "Carnivore " ~ to!string(carnivore) ~ " | ";
+		if(spiky != 0 || spikeResistence != 0)
+			description ~= "Spike (Att/Def): " ~ to!string(spiky) ~ "/" ~ to!string(spikeResistence) ~ " | ";
+
+		if(herbivore != 0 || carnivore != 0)
+			description ~= "Herbivore / Carnivore: " ~ to!string(herbivore) ~ "/" ~ to!string(carnivore) ~ " | ";
 
 		if(viewDistance != 0)
-			description ~= "View Distance " ~ to!string(viewDistance) ~ " | ";
-		if(vitality != 0)
-			description ~= "Vitality " ~ to!string(vitality) ~ " | ";
+			description ~= "View Range: " ~ to!string(viewDistance) ~ " | ";
 
 		// remove last seperator
 		description[description.length - 2] = ' ';

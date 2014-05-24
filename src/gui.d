@@ -89,8 +89,8 @@ class GUI
 		m_lastMouseCoord = currentMouseCoord;
 
 		// info text
-		m_messageTopic.position = (Vector2f(10, screenManager.resolution.y - 50));
-		m_messageInfo.position = (Vector2f(120, screenManager.resolution.y - 45));
+		m_messageTopic.position = (Vector2f(5, screenManager.resolution.y - 50));
+		m_messageInfo.position = (Vector2f(160, screenManager.resolution.y - 42));
 		if(hoveredGene != null)
 		{
 			m_messageTopic.setString(to!dstring(hoveredGene.name ~ ":"));
