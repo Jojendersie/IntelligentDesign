@@ -37,16 +37,19 @@ class ScreenManager
 
 	@property FloatRect visibleAreaRelativeCoor() const
 	{
-		return FloatRect(m_cameraPosition, screenCoorToRelativeCoor(m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight)) - m_cameraPosition );
+		return FloatRect(m_cameraPosition, screenCoorToRelativeCoor(m_resolution - Vector2f(geneBarWidth, lowerBarHeight)) - m_cameraPosition );
 	}
 	@property FloatRect visibleAreaScreenCoor() const
 	{
 		immutable Vector2f cameraScreenCoor = relativeCoorToScreenCoor(m_cameraPosition);
-		return FloatRect(cameraScreenCoor, m_resolution - Vector2f(m_leftBarWidth, m_lowerBarHeight) - cameraScreenCoor);
+		return FloatRect(cameraScreenCoor, m_resolution - Vector2f(geneBarWidth, lowerBarHeight) - cameraScreenCoor);
 	}
 
-	enum uint m_leftBarWidth = 200;
-	enum uint m_lowerBarHeight = 50;
+	enum uint geneBarWidth = 200;
+	enum uint lowerBarHeight = 50;
+
+	@property uint geneBarX() const { return cast(uint)(m_resolution.x - geneBarWidth); }
+	@property uint geneBarHeight() const { return cast(uint)(m_resolution.y - lowerBarHeight); }
 
 private:
 	enum uint m_pixelsPerUnit = 20;

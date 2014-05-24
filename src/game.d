@@ -50,7 +50,11 @@ class Game
 		foreach( geneJSON; geneArray )
 		{
 			JSONValue[string] geneData = geneJSON.object;
-			m_globalGenePool[geneData["name"].str] = new Gene(geneData);
+			string name = geneData["name"].str;
+			if( name == "ZeroGene" ) 
+				Gene.zeroGene = new Gene(geneData);
+			else
+				m_globalGenePool[name] = new Gene(geneData);
 		}
 	}
 

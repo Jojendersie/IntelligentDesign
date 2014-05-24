@@ -35,19 +35,17 @@ class Gene
 		val = "viewDistance" in data;
 	    if( val != null ) m_properties.viewDistance		= cast(int)val.integer;
 		val = "vitality" in data;
-		if( val != null ) m_properties.vitality		= cast(int)val.integer;
-
-		m_priority = Vector2f(0.0f, 0.0f);
+		if( val != null ) m_properties.vitality			= cast(int)val.integer;
 	}
 
 	@property string name() { return m_name; }
 	@property Texture texture() { return m_texture; }
 	@property Properties properties() { return m_properties; }
-	@property Vector2f priority() { return m_priority; }
+
+	static Gene zeroGene;
 
 private:
 	string m_name;
 	Texture m_texture;
 	Properties m_properties;
-	Vector2f m_priority;
 }

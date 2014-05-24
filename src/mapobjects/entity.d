@@ -65,6 +65,7 @@ private:
 
 	void overwriteGenes(ref Gene[5] genes)
 	{
+		m_properties = Gene.zeroGene.properties;
 		m_geneSlots = genes;
 		foreach(gene; m_geneSlots)
 		{
