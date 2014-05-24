@@ -140,7 +140,7 @@ class GUI
 			sprite.color = (usage.num > 0 ? Color.White : Color(100,100,100,100));
 
 			// mark if hovered! 
-			if(cast(Entity)m_hoveredObject !is null)
+			if(m_hoveredObject !is null && cast(Entity)m_hoveredObject !is null)
 			{
 				Entity entity = cast(Entity)m_hoveredObject;
 

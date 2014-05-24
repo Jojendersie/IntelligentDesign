@@ -34,36 +34,46 @@ class Entity: MapObject
 		parent0.m_vitality *= 3.0f / 4.0f;
 		parent1.m_vitality *= 3.0f / 4.0f;
 
-		// fill 4 genes by inheritance
+		// fill genes by inheritance
 		Gene[] parentGenePool = parent0.m_geneSlots ~ parent1.m_geneSlots;
+		Gene[] parentGenes = chooseGenes(parentGenePool, m_geneSlots.length);
+		for(int i=0; i<parentGenes.length; ++i)
+			m_geneSlots[i] = parentGenes[i];
+
+		// choose last gene
+		m_geneSlots[m_geneSlots.length-1] = chooseGenes(Game.globalGenePool().values(), 1)[0];
+
+		updatePropertiesAndReportGenes();
+	}
+
+	Gene[] chooseGenes(Gene[] genePool, int numGenesToChoose)
+	{
+		Gene[] genePoolCpy = genePool.dup;
+		Gene[] outputGenes = new Gene[numGenesToChoose];
+
 		float totalPriority = 0.0f;
-		for(int pgene=0; pgene<parentGenePool.length; ++pgene)
-			totalPriority += m_species.genes()[parentGenePool[pgene]].priority.y;
-		for(int i=0; i<m_geneSlots.length-1; ++i)
+		for(int pgene=0; pgene<genePoolCpy.length; ++pgene)
+			totalPriority += m_species.genes()[genePoolCpy[pgene]].priority.y;
+		for(int i=0; i<numGenesToChoose; ++i)
 		{
 			float choosenGene = uniform(0.0f, totalPriority);
 
 			float currentPrioritySum = 0.0f;
-			for(int pgene=0; pgene<parentGenePool.length; ++pgene)
+			for(int pgene=0; pgene<genePoolCpy.length; ++pgene)
 			{
-				if(parentGenePool[pgene] is null)
+				if(genePoolCpy[pgene] is null)
 					continue;
-				float currentPrio = m_species.genes()[parentGenePool[pgene]].priority.y;
+				float currentPrio = m_species.genes()[genePoolCpy[pgene]].priority.y;
 				currentPrioritySum += currentPrio;
 				if(currentPrioritySum > choosenGene)
 				{
-					m_geneSlots[i] = parentGenePool[pgene];
-					parentGenePool[pgene] = null;
+					outputGenes[i] = genePoolCpy[pgene];
+					genePoolCpy[pgene] = null;
 					totalPriority -= currentPrio;
-					break;
 				}
 			}
 		}
-
-		// choose last gene randomly
-		m_geneSlots[m_geneSlots.length-1] = Game.globalGenePool().values()[uniform(0, Game.globalGenePool().length)];
-
-		updatePropertiesAndReportGenes();
+		return outputGenes;
 	}
 
 	~this()
