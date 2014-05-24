@@ -4,6 +4,7 @@ import properties;
 import species;
 
 import dsfml.graphics;
+import std.math;
 
 class Entity: MapObject
 {
@@ -11,18 +12,19 @@ class Entity: MapObject
 	{
 		m_species = species;
 		m_position = position;
-		m_geneSlots = genes;
-
-		// todo report genes to species
+		overwriteGenes(genes);
 	}
 
 	this(Entity parent0, Entity parent1)
 	{
+		// todo inheritance mechanism
+		overwriteGenes(parent0.m_geneSlots);
 	}
 
 	~this()
 	{
-		// todo report deleted genes
+		foreach(gene; m_geneSlots)
+			m_species.decreaseGene(gene);
 	}
 
 	// Get one of the N genes
@@ -43,16 +45,32 @@ class Entity: MapObject
 	// Observe the environment search a target and go one step.
 	override void update()
 	{
+	/*	++m_numStepsSinceAngleChange;
+		// new goal?
+		if(m_numStepsSinceAngleChange < m_numStepsSameWalkAim)
+		{
+			auto rnd = Xorshift(unpredictableSeed());
+			m_numStepsSinceAngleChange = 0;
+			m_aimedWalkAngleLast = m_aimedWalkAngleCurrent;
+			m_aimedWalkAngleCurrent = uniform(0, PI);
+		}
+		// interpolate direction
+		float currentAngle = 
+		Vector2f direction = Vector2f(); */
 	}
 
 	@property Properties properties() { return m_properties; }
 
 private:
 
-	void calculatePropertiesFromGenes()
+	void overwriteGenes(ref Gene[5] genes)
 	{
+		m_geneSlots = genes;
 		foreach(gene; m_geneSlots)
+		{
+			m_species.increaseGene(gene);
 			m_properties = m_properties + gene.properties;
+		}
 	}
 
 	Properties m_properties;
@@ -61,4 +79,9 @@ private:
 	Species m_species;
 
 	enum float m_entityRadius = 0.4f;
+
+	float m_aimedWalkAngleLast;
+	float m_aimedWalkAngleCurrent;
+	int m_numStepsSinceAngleChange = 20;
+	enum int m_numStepsSameWalkAim = 20;
 }
