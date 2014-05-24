@@ -2,7 +2,7 @@
     "genes": [
 	    {
             "name": "ZeroGene",
-		    "image": "",
+		    "image": "zero.png",
 		    "velocityWater": 1,
 	        "velocityLand": 1,
 	        "vitatlityWater": -2,

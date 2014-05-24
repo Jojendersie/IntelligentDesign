@@ -30,7 +30,7 @@ class Game
 		m_screenManager.resolution = Vector2f(window.size().x, window.size().y); // brain-dead simple: If the resolution change, our game can handle this ;D
 		
 		m_map.render(window, m_screenManager);
-		m_gui.render(window, m_screenManager);
+		m_gui.render(window, m_screenManager, m_player.species);
 	}
 
 	void update()
@@ -50,7 +50,7 @@ class Game
 		foreach( geneJSON; geneArray )
 		{
 			JSONValue[string] geneData = geneJSON.object;
-			globalGenePool[geneData["name"].str] = new Gene(geneData);
+			m_globalGenePool[geneData["name"].str] = new Gene(geneData);
 		}
 	}
 
@@ -58,7 +58,7 @@ private:
 	ScreenManager m_screenManager;
 	Map m_map;
 	Species[] m_allSpecies = new Species[5];
-	Gene[string] globalGenePool;
+	Gene[string] m_globalGenePool;
 	Player m_player;
 	GUI m_gui = new GUI();
 }

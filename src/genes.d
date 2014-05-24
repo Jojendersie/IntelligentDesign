@@ -1,6 +1,7 @@
 import properties;
 import std.json;
 import std.stdio;
+import dsfml.graphics;
 
 class Gene
 {
@@ -8,7 +9,8 @@ class Gene
 	{
 		assert(data != null);
 		m_name = data["name"].str;
-		m_sprite = data["image"].str;
+		m_texture = new Texture();
+		m_texture.loadFromFile( "content/" ~ data["image"].str );
 		// Load save: when a value does not exist keep the standard 0
 		JSONValue* val = "velocityWater" in data;
 		if( val != null ) m_properties.velocityWater	= cast(int)val.integer;
@@ -34,14 +36,18 @@ class Gene
 	    if( val != null ) m_properties.viewDistance		= cast(int)val.integer;
 		val = "vitatlity" in data;
 		if( val != null ) m_properties.vitatlity		= cast(int)val.integer;
+
+		m_priority = Vector2f(0.0f, 0.0f);
 	}
 
 	@property string name() { return m_name; }
-	@property string sprite() { return m_sprite; }
+	@property Texture texture() { return m_texture; }
 	@property Properties properties() { return m_properties; }
+	@property Properties priority() { return m_properties; }
 
 private:
 	string m_name;
-	string m_sprite;	// File name of the used picture
+	Texture m_texture;
 	Properties m_properties;
+	Vector2f m_priority;
 }

@@ -1,9 +1,10 @@
 import screenmanager;
 import dsfml.graphics;
+import species;
 
 class GUI
 {
-	void render(RenderWindow window, const ScreenManager screenManager)
+	void render(RenderWindow window, const ScreenManager screenManager, const Species species)
 	{
 		auto rectangleShape = new RectangleShape();
 
@@ -18,5 +19,9 @@ class GUI
 		rectangleShape.position = Vector2f(0, window.size.y - screenManager.m_lowerBarHeight);
 		rectangleShape.size = Vector2f(window.size.x, screenManager.m_lowerBarHeight);
 		window.draw(rectangleShape);
+
+		// The genes
+		//foreach( gene; species )
+		//Sprite 
 	}
 }
