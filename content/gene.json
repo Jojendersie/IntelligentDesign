@@ -23,6 +23,12 @@
 			"vitality": -2
 		},
 		{
+			"name": "Fins",
+			"image": "fin.png",
+			"velocityWater": 3,
+			"vitality": -2
+		},
+		{
 			"name": "Eyes",
 			"image": "eye.png",
 			"viewDistance": 3
@@ -31,6 +37,11 @@
 			"name": "Lung",
 			"image": "lung.png",
 			"vitalityLand": 2
+		},
+		{
+			"name": "Gill",
+			"image": "gill.png",
+			"vitalityWater": 2
 		}
   ]
 }
