@@ -39,6 +39,16 @@ class Map
 				window.draw(rectangleShape);
 			}
 		}
+
+		// draw all entites
+		foreach(mapObject; m_mapObjects)
+			mapObject.render(window, screenManager);
+	}
+
+	void update()
+	{
+		foreach(mapObject; m_mapObjects)
+			mapObject.update();
 	}
 
 	bool isLand(float x, float y) const
@@ -94,13 +104,23 @@ private:
 		auto rnd = Xorshift(unpredictableSeed());
 		foreach(s; species)
 		{
-			uint numEntities = uniform(m_minNum, m_maxNum, rnd);
+			uint numEntities = uniform(m_startPopMinNum, m_startPopMaxNum, rnd);
+
+			// find a home!
+			immutable Vector2f populationCenter = Vector2f(uniform(m_startPopDistribution*1.5f, m_ground.length    - m_startPopDistribution * 1.5f, rnd),
+									   					   uniform(m_startPopDistribution*1.5f, m_ground[0].length - m_startPopDistribution * 1.5f, rnd));
+
 			for(int i=0; i<numEntities; ++i)
-				m_mapObjects ~= new Entity(s);
+			{
+				Vector2f entityPos = populationCenter;
+				entityPos.x += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
+				entityPos.y += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
+				m_mapObjects ~= new Entity(s, entityPos);
+			}
 		}
 	}
 
-	enum uint m_minNum = 10;
-	enum uint m_maxNum = 20;
-
+	enum uint m_startPopMinNum = 10;
+	enum uint m_startPopMaxNum = 15;
+	enum float m_startPopDistribution = 5.0f;
 }

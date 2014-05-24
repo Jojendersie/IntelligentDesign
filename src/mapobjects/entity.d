@@ -3,11 +3,14 @@ import genes;
 import properties;
 import species;
 
+import dsfml.graphics;
+
 class Entity: MapObject
 {
-	this(Species species)
+	this(Species species, Vector2f position)
 	{
 		m_species = species;
+		m_position = position;
 	}
 
 	// Get one of the N genes
@@ -16,12 +19,17 @@ class Entity: MapObject
 		return m_geneSlots[slot];
 	}
 
-	// Observe the environment search a target and go one step.
-	override void update()
+
+	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_entityRadius), 10);
+		circleShape.position = screenManager.relativeCorToScreenCor(m_position - Vector2f(m_entityRadius, m_entityRadius));
+		circleShape.fillColor = Color.Magenta;
+		window.draw(circleShape);
 	}
 
-	override void draw(RenderWindow window, const ScreenManager screenManager)
+	// Observe the environment search a target and go one step.
+	override void update()
 	{
 	}
 
@@ -32,4 +40,6 @@ private:
 	Gene[5] m_geneSlots;
 	float m_vitality;
 	Species m_species;
+
+	enum float m_entityRadius = 0.4f;
 }

@@ -9,7 +9,7 @@ class Plant: MapObject
 		m_age += 1.0f/60.0f;
 	}
 
-	override void draw(RenderWindow window, const ScreenManager screenManager)
+	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
 	}
 

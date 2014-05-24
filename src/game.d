@@ -36,6 +36,7 @@ class Game
 	void update()
 	{
 		m_player.update(m_screenManager);
+		m_map.update();
 	}
 
 	void loadGenes()

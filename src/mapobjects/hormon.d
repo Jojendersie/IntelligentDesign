@@ -7,7 +7,7 @@ class Hormon: MapObject
 	{
 	}
 
-	override void draw(RenderWindow window, const ScreenManager screenManager)
+	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
 	}
 }
