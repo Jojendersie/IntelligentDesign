@@ -205,7 +205,7 @@ private:
 		// Smoothstep
 		float likesSex = (m_vitality - m_sexThreshold) * 0.1f;
 		likesSex = fmax(0.0f, fmin(1.0f, likesSex));
-		likesSex *= likesSex * (3 - 2 * likesSex) * 0.9f;
+		likesSex *= likesSex * (3 - 2 * likesSex);
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
@@ -215,7 +215,7 @@ private:
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return p.getEnergy() * (1.0f - likesSex);
+			return p.getEnergy() * (1.0f - likesSex * 0.5f);
 		}
 		return 0.0f;
 	}

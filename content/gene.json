@@ -19,19 +19,19 @@
 		{
 			"name": "Legs",
 			"image": "leg.png",
-			"velocityLand": 3,
+			"velocityLand": 2,
 			"vitality": -2
 		},
 		{
 			"name": "Fins",
 			"image": "fin.png",
-			"velocityWater": 3,
+			"velocityWater": 2,
 			"vitality": -2
 		},
 		{
 			"name": "Eyes",
 			"image": "eye.png",
-			"viewDistance": 3
+			"viewDistance": 2
 		},
 		{
 			"name": "Lung",
@@ -42,6 +42,16 @@
 			"name": "Gill",
 			"image": "gill.png",
 			"vitalityWater": 2
+		},
+		{
+			"name": "Poisonous",
+			"image": "poison.png",
+			"poisonous": 1
+		},
+		{
+			"name": "Antipoison",
+			"image": "poisonResistence.png",
+			"poisonResistence": 1
 		}
   ]
 }
