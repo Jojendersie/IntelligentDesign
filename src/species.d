@@ -8,7 +8,10 @@ class Species
 	this(bool isPlayer)
 	{
 		// Choose a random color
-		m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
+		if( isPlayer )
+			m_color = Color(255, 144, 1);
+		else
+			m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
 		m_isPlayer = isPlayer;
 
 		foreach(gene; Game.globalGenePool())
