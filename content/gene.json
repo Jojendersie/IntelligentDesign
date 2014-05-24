@@ -1,26 +1,36 @@
 {
-    "genes": [
-	    {
-            "name": "ZeroGene",
-		    "image": "zero.png",
-		    "velocityWater": 1,
-	        "velocityLand": 1,
-	        "vitalityWater": -2,
-	        "vitalityLand": -2,
-	        "poisonous": 0,
-	        "poisonResistence": 0,
-	        "spiky": 0,
-	        "spikeResistence": 0,
-	        "herbivore": 1,
-	        "carnivore": 1,
-	        "viewDistance": 3,
-		    "vitality": -1
+	"genes": [
+		{
+			"name": "ZeroGene",
+			"image": "zero.png",
+			"velocityWater": 1,
+			"velocityLand": 1,
+			"vitalityWater": -2,
+			"vitalityLand": -2,
+			"poisonous": 0,
+			"poisonResistence": 0,
+			"spiky": 0,
+			"spikeResistence": 0,
+			"herbivore": 1,
+			"carnivore": 1,
+			"viewDistance": 3,
+			"vitality": -1
 		},
-	    {
-            "name": "Legs",
-		    "image": "leg.png",
-	        "velocityLand": 3,
-		    "vitality": -2
+		{
+			"name": "Legs",
+			"image": "leg.png",
+			"velocityLand": 3,
+			"vitality": -2
+		},
+		{
+			"name": "Eyes",
+			"image": "eye.png",
+			"viewDistance": 3
+		},
+		{
+			"name": "Lung",
+			"image": "lung.png",
+			"vitalityLand": 2
 		}
-    ]
+  ]
 }
