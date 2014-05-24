@@ -17,7 +17,7 @@ class Map
 	{
 		m_groundTexture = new Texture();
 		m_groundTexture.create(m_ground.length, m_ground[0].length);
-		m_groundTexture.setSmooth(true);
+		m_groundTexture.setSmooth(false);
 		m_groundTexture.setRepeated(false);
 		m_groundSprite = new Sprite();
 		m_groundSprite.setTexture(m_groundTexture);
