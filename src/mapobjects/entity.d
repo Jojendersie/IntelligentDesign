@@ -147,6 +147,21 @@ class Entity: MapObject
 			}
 		}
 
+		// Evaluate landscape
+		Xorshift rnd;
+		// Use some property values to increase the diversity
+		rnd.seed(m_properties.vitality + m_properties.vitalityWater + m_properties.vitalityLand);
+		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 20.0f
+			+ (m_properties.velocityLand - m_properties.velocityWater) * 8.0f;
+		// Take 16 random samples in a circle and check for land / water
+		for( int i = 0; i < 16; ++i )
+		{
+			float phi = uniform(0.0f, cast(float)PI*2.0f, rnd);
+			float radius = sqrt(uniform(0.0f, 1.0f, rnd)) * m_properties.viewDistance * m_viewDistanceMultiplier;
+			Vector2f position = Vector2f(sin(phi), cos(phi)) * radius;
+			targetingDirection += position * (map.isLand(position) ? prefersLand : -prefersLand) / radius;
+		}
+
 		// interpolate direction and move
 		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
 		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));

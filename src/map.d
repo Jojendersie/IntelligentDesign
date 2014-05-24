@@ -68,9 +68,9 @@ class Map
 											   uniform(0.0f, nextDown(cast(float)m_ground[0].length-1))));
 		}
 
-		foreach(mapObject; m_mapObjects)
-			if( !mapObject.removed )
-				mapObject.update(this);
+		for(int i = 0; i < m_mapObjects.length; ++i )
+			if( !m_mapObjects[i].removed )
+				m_mapObjects[i].update(this);
 
 		removeObjects();
 	}

@@ -13,7 +13,7 @@
 			"spikeResistence": 0,
 			"herbivore": 1,
 			"carnivore": 1,
-			"viewDistance": 3,
+			"viewDistance": 4,
 			"vitality": -1
 		},
 		{
@@ -31,7 +31,7 @@
 		{
 			"name": "Eyes",
 			"image": "eye.png",
-			"viewDistance": 2
+			"viewDistance": 3
 		},
 		{
 			"name": "Lung",
