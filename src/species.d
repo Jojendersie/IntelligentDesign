@@ -17,13 +17,12 @@ class Species
 		foreach(gene; Game.globalGenePool())
 		{
 			m_genes[gene] = GeneUsage();
-			m_genes[gene].randomizePriority();
-		}
-	}
 
-	// updates gene priorities automatically - ONLY FOR NON-HUMAN PLAYERs!
-	void updatePriorities()
-	{
+			if(m_isPlayer)
+				m_genes[gene].randomizePriority();
+			else
+				m_genes[gene].priority = Vector2f(0, 1);
+		}
 	}
 
 	// Entry to define occurence and likelyness for the species
