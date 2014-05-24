@@ -8,6 +8,7 @@ import dsfml.graphics;
 
 import std.algorithm;
 import std.random;
+import std.array;
 
 class Map
 {
@@ -61,7 +62,10 @@ class Map
 		}
 
 		foreach(mapObject; m_mapObjects)
-			mapObject.update(this);
+			if( !mapObject.removed )
+				mapObject.update(this);
+
+		removeObjects();
 	}
 
 	bool isLand(Vector2f pos) const
@@ -126,13 +130,26 @@ class Map
 		// Brute force search
 		foreach(obj; m_mapObjects)
 		{
-			if( length(obj.position - pos) <= maxDistance )
+			if( !obj.removed && length(obj.position - pos) <= maxDistance )
 			{
 				query ~= obj;
 			}
 		}
 
 		return query;
+	}
+
+	void removeObjects()
+	{
+		for(int i = 0; i < m_mapObjects.length; ++i )
+		{
+			if( m_mapObjects[i].removed )
+			{
+				delete(m_mapObjects[i]);
+				m_mapObjects.replaceInPlace(i, i+1, [m_mapObjects.back()]);
+				m_mapObjects.popBack();
+			}
+		}
 	}
 
 private:

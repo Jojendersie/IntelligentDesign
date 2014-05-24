@@ -12,6 +12,8 @@ abstract class MapObject
 public:
 	@property Vector2f position() const { return m_position; }
 
+	bool removed = false;
+
 protected:
 	Vector2f m_position;
 

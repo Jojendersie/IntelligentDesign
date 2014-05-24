@@ -16,6 +16,7 @@ class Entity: MapObject
 		m_species = species;
 		m_position = position;
 		m_geneSlots = genes;
+		m_vitality = uniform(50.0f, 90.0f);
 		updatePropertiesAndReportGenes();
 	}
 
@@ -26,6 +27,11 @@ class Entity: MapObject
 		m_position = (parent0.position + parent1.position) / 2;
 		this();
 		
+		// Transfere 1/4 of each parent's energy.
+		m_vitality = parent0.m_vitality / 4.0f + parent1.m_vitality / 4.0f;
+		parent0.m_vitality *= 3.0f / 4.0f;
+		parent1.m_vitality *= 3.0f / 4.0f;
+
 		// fill 4 genes by inheritance
 		Gene[] parentGenePool = parent0.m_geneSlots ~ parent1.m_geneSlots;
 		float totalPriority = 0.0f;
@@ -84,6 +90,18 @@ class Entity: MapObject
 	{
 		++m_numStepsSinceAngleChange;
 
+		// Die?
+		m_vitality += properties.vitality * m_vitalityLossFactor;
+		if( map.isLand(m_position) )
+			m_vitality += properties.vitalityLand * m_vitalityLossFactor;
+		else
+			m_vitality += properties.vitalityWater * m_vitalityLossFactor;
+		if( m_vitality <= 0.0f )
+		{
+			removed = true;
+			return;
+		}
+
 		// Find a nice target in the environment
 		float viewDistance = properties.viewDistance * m_viewDistanceMultiplier;
 		MapObject[] allVisible = map.queryObjects(position, viewDistance);
@@ -97,7 +115,6 @@ class Entity: MapObject
 				targetingDirection += dir * attr;
 			}
 		}
-		//targetingDirection = normalize(targetingDirection);
 
 		// interpolate direction and move
 		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
@@ -178,4 +195,5 @@ private:
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
+	enum float m_vitalityLossFactor = 0.1f;
 }
