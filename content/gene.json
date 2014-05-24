@@ -52,6 +52,26 @@
 			"name": "Antipoison",
 			"image": "poisonResistence.png",
 			"poisonResistence": 1
+		},
+		{
+			"name": "Spikes",
+			"image": "spikes.png",
+			"spiky": 1
+		},
+		{
+			"name": "Armor",
+			"image": "armor.png",
+			"spikeResistence": 1
+		},
+		{
+			"name": "Teeth",
+			"image": "carnivore.png",
+			"carnivore": 2
+		},
+		{
+			"name": "Stomach",
+			"image": "herbivore.png",
+			"herbivore": 2
 		}
   ]
 }
