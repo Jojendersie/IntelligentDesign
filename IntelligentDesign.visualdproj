@@ -191,7 +191,6 @@
  <Folder name="IntelligentDesign">
   <Folder name="mapobjects">
    <File path="src\mapobjects\entity.d" />
-   <File path="src\mapobjects\hormon.d" />
    <File path="src\mapobjects\mapobject.d" />
    <File path="src\mapobjects\package.d" />
    <File path="src\mapobjects\plant.d" />

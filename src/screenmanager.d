@@ -15,6 +15,11 @@ class ScreenManager
         return (relativeCoor - m_cameraPosition) * m_pixelsPerUnit;
     }
 
+	Vector2f screenCoorToRelativeCoor(Vector2i screenCoor) const
+    {
+        return screenCoorToRelativeCoor(Vector2f(cast(float)screenCoor.x, cast(float)screenCoor.y));
+    }
+
     Vector2f screenCoorToRelativeCoor(Vector2f screenCoor) const
     {
         return screenCoor / m_pixelsPerUnit + m_cameraPosition;

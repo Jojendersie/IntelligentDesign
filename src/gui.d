@@ -4,6 +4,7 @@ import species;
 import genes;
 import std.stdio;
 import std.conv;
+import mapobjects;
 
 class GUI
 {
@@ -89,45 +90,11 @@ class GUI
 
 		// info text
 		m_messageTopic.position = (Vector2f(10, screenManager.resolution.y - 50));
-		m_messageInfo.position = (Vector2f(100, screenManager.resolution.y - 40));
+		m_messageInfo.position = (Vector2f(120, screenManager.resolution.y - 45));
 		if(hoveredGene != null)
 		{
 			m_messageTopic.setString(to!dstring(hoveredGene.name ~ ":"));
-	
-			char[] description;
-			if(hoveredGene.properties.velocityWater != 0)
-				description ~= "Velocity Water " ~ to!string(hoveredGene.properties.velocityWater) ~ " | ";
-			if(hoveredGene.properties.velocityLand != 0)
-				description ~= "Velocity Land " ~ to!string(hoveredGene.properties.velocityLand) ~ " | ";
-			if(hoveredGene.properties.vitalityWater != 0)
-				description ~= "Vitality Water " ~ to!string(hoveredGene.properties.velocityWater) ~ " | ";
-			if(hoveredGene.properties.vitalityLand != 0)
-				description ~= "Vitality Land " ~ to!string(hoveredGene.properties.velocityLand) ~ " | ";
-			
-			if(hoveredGene.properties.poisonous != 0)
-				description ~= "Poison Attack " ~ to!string(hoveredGene.properties.poisonous) ~ " | ";
-			if(hoveredGene.properties.poisonResistence != 0)
-				description ~= "Poison Resist. " ~ to!string(hoveredGene.properties.poisonResistence) ~ " | ";
-
-			if(hoveredGene.properties.spiky != 0)
-				description ~= "Spike Attack " ~ to!string(hoveredGene.properties.spiky) ~ " | ";
-			if(hoveredGene.properties.spikeResistence != 0)
-				description ~= "Spike Resist. " ~ to!string(hoveredGene.properties.spikeResistence) ~ " | ";
-
-			if(hoveredGene.properties.herbivore != 0)
-				description ~= "Herbivore " ~ to!string(hoveredGene.properties.herbivore) ~ " | ";
-			if(hoveredGene.properties.carnivore != 0)
-				description ~= "Carnivore " ~ to!string(hoveredGene.properties.carnivore) ~ " | ";
-
-			if(hoveredGene.properties.viewDistance != 0)
-				description ~= "View Distance " ~ to!string(hoveredGene.properties.viewDistance) ~ " | ";
-			if(hoveredGene.properties.vitality != 0)
-				description ~= "Vitality " ~ to!string(hoveredGene.properties.vitality) ~ " | ";
-
-			// remove last seperator
-			description[description.length - 2] = ' ';
-
-			m_messageInfo.setString(to!dstring(description));
+			m_messageInfo.setString(to!dstring(hoveredGene.properties.getTextDescription()));
 		}
 		else
 		{
@@ -158,7 +125,7 @@ class GUI
 
 
 		// The genes
-		foreach( gene; species.genes.keys )
+		foreach_reverse( gene; species.genes.keys )
 		{
 			const Species.GeneUsage* usage = &species.genes[gene];
 			if( usage.num > 0 )
@@ -169,6 +136,26 @@ class GUI
 				sprite.scale = Vector2f(1.0f, 1.0f);
 				window.draw(sprite);
 			}
+		}
+	}
+
+	void displayObjectInfo(MapObject obj)
+	{
+		if(cast(Plant)obj !is null)
+		{
+			m_messageTopic.setString("Plant:"d);
+			string description = "Energy: " ~ to!string(cast(int)(cast(Plant)obj).getEnergy());
+			m_messageInfo.setString(to!dstring(description));
+		}
+		else if(cast(Entity)obj !is null)
+		{
+			Entity entity = cast(Entity)obj;
+
+			m_messageTopic.setString("Entity:"d);
+
+			char[] description;
+			description ~= "Energy: " ~ to!string(cast(int)entity.vitality) ~ " -- " ~ entity.properties.getTextDescription();
+			m_messageInfo.setString(to!dstring(description));
 		}
 	}
 

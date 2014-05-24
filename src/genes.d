@@ -19,7 +19,7 @@ class Gene
 		val = "vitalityWater" in data;
 	    if( val != null ) m_properties.vitalityWater	= cast(int)val.integer;
 		val = "vitalityLand" in data;
-	    if( val != null ) m_properties.velocityLand		= cast(int)val.integer;
+	    if( val != null ) m_properties.vitalityLand		= cast(int)val.integer;
 		val = "poisonous" in data;
 	    if( val != null ) m_properties.poisonous		= cast(int)val.integer;
 		val = "poisonResistence" in data;
@@ -38,7 +38,7 @@ class Gene
 		if( val != null ) m_properties.vitality			= cast(int)val.integer;
 	}
 
-	@property string name() { return m_name; }
+	@property string name() const { return m_name; }
 	@property Texture texture() { return m_texture; }
 	@property Properties properties() { return m_properties; }
 

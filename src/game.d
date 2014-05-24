@@ -9,6 +9,7 @@ import std.json;
 import std.conv;
 import properties;
 import genes;
+import mapobjects;
 
 class Game
 {
@@ -44,6 +45,10 @@ class Game
 	{
 		m_map.update();
 		m_gui.update(m_screenManager, window, m_playerSpecies);
+
+		MapObject hoverObject = m_map.queryObjectExact(m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window)));
+		if(hoverObject !is null)
+			m_gui.displayObjectInfo(hoverObject);
 	}
 
 	void loadGenes()

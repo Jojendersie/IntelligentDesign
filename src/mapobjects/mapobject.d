@@ -14,7 +14,9 @@ public:
 
 	bool removed = false;
 
+	@property float displayRadius() const { return m_displayRadius; }
+
 protected:
 	Vector2f m_position;
-
+	float m_displayRadius = 0.0f;
 }

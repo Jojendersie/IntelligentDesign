@@ -52,6 +52,11 @@ float length(Vector2f vector)
 	return sqrt(vector.x * vector.x + vector.y * vector.y);
 }
 
+float lengthSq(Vector2f vector)
+{
+	return (vector.x * vector.x + vector.y * vector.y);
+}
+
 Vector2f normalize(Vector2f vector)
 {
 	return vector / fmax(length(vector), 1e-10f);

@@ -1,3 +1,5 @@
+import std.conv;
+
 struct Properties
 {
 	int velocityWater;		// Movement factor in water
@@ -50,5 +52,44 @@ struct Properties
 			static assert(0, "Operator "~op~" not implemented");
 
 		return results;
+	}
+
+	char[] getTextDescription()
+	{
+		char[] description;
+
+		if(velocityWater != 0)
+			description ~= "Velocity Water " ~ to!string(velocityWater) ~ " | ";
+		if(velocityLand != 0)
+			description ~= "Velocity Land " ~ to!string(velocityLand) ~ " | ";
+		if(vitalityWater != 0)
+			description ~= "Vitality Water " ~ to!string(vitalityWater) ~ " | ";
+		if(vitalityLand != 0)
+			description ~= "Vitality Land " ~ to!string(vitalityLand) ~ " | ";
+
+		if(poisonous != 0)
+			description ~= "Poison Attack " ~ to!string(poisonous) ~ " | ";
+		if(poisonResistence != 0)
+			description ~= "Poison Resist. " ~ to!string(poisonResistence) ~ " | ";
+
+		if(spiky != 0)
+			description ~= "Spike Attack " ~ to!string(spiky) ~ " | ";
+		if(spikeResistence != 0)
+			description ~= "Spike Resist. " ~ to!string(spikeResistence) ~ " | ";
+
+		if(herbivore != 0)
+			description ~= "Herbivore " ~ to!string(herbivore) ~ " | ";
+		if(carnivore != 0)
+			description ~= "Carnivore " ~ to!string(carnivore) ~ " | ";
+
+		if(viewDistance != 0)
+			description ~= "View Distance " ~ to!string(viewDistance) ~ " | ";
+		if(vitality != 0)
+			description ~= "Vitality " ~ to!string(vitality) ~ " | ";
+
+		// remove last seperator
+		description[description.length - 2] = ' ';
+
+		return description;
 	}
 }

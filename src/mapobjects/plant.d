@@ -17,20 +17,21 @@ class Plant: MapObject
 
 	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
-		float radius = sizeEnergyScale * getEnergy();
-		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(radius), 4);
-		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(radius, radius));
+		m_displayRadius = sizeEnergyScale * getEnergy();
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius), 4);
+		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_displayRadius));
 		circleShape.fillColor = Color.Green;
 		window.draw(circleShape);
 	}
 
 	float getEnergy()
 	{
-		return log(log(m_age + 1.0f) + 1.0f);
+		return log(log(m_age + 1.0f) + 1.0f) * m_plantEnergyMultiplyer;
 	}
 
 private:
 	float m_age = 0.0f;
 
-	enum float sizeEnergyScale = 0.4f;
+	enum float m_plantEnergyMultiplyer = 40.0f;
+	enum float sizeEnergyScale = 0.4f / m_plantEnergyMultiplyer;
 }

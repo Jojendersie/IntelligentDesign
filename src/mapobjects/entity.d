@@ -12,7 +12,7 @@ import std.random;
 
 class Entity: MapObject
 {
-	this(Species species, Vector2f position, ref Gene[5] genes)
+	this(Species species, Vector2f position, ref Gene[4] genes)
 	{
 		this();
 		m_species = species;
@@ -39,7 +39,7 @@ class Entity: MapObject
 		float totalPriority = 0.0f;
 		for(int pgene=0; pgene<parentGenePool.length; ++pgene)
 			totalPriority += m_species.genes()[parentGenePool[pgene]].priority.y;
-		for(int i=0; i<m_geneSlots.length; ++i)
+		for(int i=0; i<m_geneSlots.length-1; ++i)
 		{
 			float choosenGene = uniform(0.0f, totalPriority);
 
@@ -83,10 +83,10 @@ class Entity: MapObject
 
 	override void render(RenderWindow window, const ScreenManager screenManager)
 	{
-		float radius = getRadius();
-		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(radius),
+		m_displayRadius = getRadius();
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius),
 										   m_species.isPlayer ? 3 : 10);
-		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(radius, m_entityRadius));
+		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_entityRadius));
 		circleShape.fillColor = m_species.color;
 		if( canHaveSex() )
 		{
@@ -129,9 +129,9 @@ class Entity: MapObject
 				if( distSq <= 0.1f )
 				{
 					Entity e = cast(Entity)other;
-					if( e !is null )
+					if( e !is null && e.m_species == m_species)
 					{
-						if( e.canHaveSex() && canHaveSex() )
+						if( e.canHaveSex() && canHaveSex())
 						{
 							map.addObject( new Entity(this, e) );
 						}
@@ -175,6 +175,11 @@ class Entity: MapObject
 
 	@property Properties properties() { return m_properties; }
 	@property Species species() { return m_species; }
+
+	@property float vitality() const { return m_vitality; }
+
+	@property ref const(Gene[4]) geneSlots() const		{ return m_geneSlots; }
+	@property ref const(Properties) properties() const	{ return m_properties; }
 
 	bool canHaveSex() const { return m_vitality > m_sexThreshold; }
 
@@ -232,14 +237,14 @@ private:
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return p.getEnergy() * m_plantMultiplyer;
+			return p.getEnergy();
 		}
 
 		return 0.0f;
 	}
 
 	Properties m_properties;
-	Gene[5] m_geneSlots;
+	Gene[4] m_geneSlots;
 	float m_vitality;
 	Species m_species;
 
@@ -252,11 +257,9 @@ private:
 	enum int m_numStepsSameWalkAim = 100;
 
 
-
 	enum float m_sexThreshold = 100.0f;
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
-	enum float m_plantMultiplyer = 40.0f;
 }

@@ -135,15 +135,29 @@ class Map
 		}*/
 
 		// Brute force search
+		float maxDistanceSq = maxDistance * maxDistance;
 		foreach(obj; m_mapObjects)
 		{
-			if( !obj.removed && length(obj.position - pos) <= maxDistance )
+			if( !obj.removed && lengthSq(obj.position - pos) <= maxDistanceSq)
 			{
 				query ~= obj;
 			}
 		}
 
 		return query;
+	}
+
+	MapObject queryObjectExact(Vector2f pos)
+	{
+		// Brute force search
+		foreach(obj; m_mapObjects)
+		{
+			if( !obj.removed && lengthSq(obj.position - pos) <= obj.displayRadius*obj.displayRadius)
+			{
+				return obj;
+			}
+		}
+		return null;
 	}
 
 	void removeObjects()
@@ -172,7 +186,7 @@ private:
 	// Use bilinear sampling of a height map to get smoother borders
 	float sampleGround(Vector2f pos) const
 	{
-		assert(pos.x >= 0 && pos.y >= 0 && pos.y < m_ground[0].length && pos.x < m_ground.length);
+		clampToGame(pos);
 
 		int ix = cast(int)pos.x;
 		int iy = cast(int)pos.y;
@@ -207,7 +221,7 @@ private:
 	void startupSpeciesPopulate(Species[] species, Gene[string] globalGenePool)
 	{
 		auto rnd = Xorshift(unpredictableSeed());
-		Gene[5] randomGenes;
+		Gene[4] randomGenes;
 		foreach(s; species)
 		{
 			uint numEntities = uniform(m_startPopMinNum, m_startPopMaxNum, rnd);
@@ -222,7 +236,7 @@ private:
 				entityPos.x += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 				entityPos.y += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 
-				// choose 5 random genese
+				// choose random genese
 				for(int gene=0; gene<randomGenes.length; ++gene)
 					randomGenes[gene] = globalGenePool.values[uniform(0, globalGenePool.length, rnd)];
 
