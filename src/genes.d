@@ -43,7 +43,7 @@ class Gene
 	@property string name() { return m_name; }
 	@property Texture texture() { return m_texture; }
 	@property Properties properties() { return m_properties; }
-	@property Properties priority() { return m_properties; }
+	@property Vector2f priority() { return m_priority; }
 
 private:
 	string m_name;

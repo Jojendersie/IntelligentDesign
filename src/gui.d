@@ -21,7 +21,16 @@ class GUI
 		window.draw(rectangleShape);
 
 		// The genes
-		//foreach( gene; species )
-		//Sprite 
+		foreach( gene; species.genes.keys )
+		{
+			if( species.genes[gene] > 0 )
+			{
+				Sprite sprite = new Sprite(gene.texture());
+				sprite.position.x = gene.priority().x * (screenManager.m_leftBarWidth - 64) + 32;
+				sprite.position.y = gene.priority().y * (screenManager.m_leftBarWidth - 64) + 32;
+				sprite.scale = Vector2f(64.0f, 64.0f);
+				window.draw(sprite);
+			}
+		}
 	}
 }
