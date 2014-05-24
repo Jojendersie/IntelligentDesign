@@ -11,6 +11,7 @@ class ScreenManager
 		m_cameraPosition = Vector2f(0.0f, 0.0f);
     }
 
+
     Vector2f relativeCorToScreenCor(Vector2f relativeCor)
     {
         return (relativeCor - m_cameraPosition) * pixelsPerUnit;
@@ -21,13 +22,15 @@ class ScreenManager
         return screenCor / pixelsPerUnit + m_cameraPosition;
     }
 
-    float realtiveLengthToScreenLength(float l)
+    float relativeLengthToScreenLength(float l)
     {
         return l * pixelsPerUnit;
     }
 
 	@property ref Vector2f cameraPosition()			{ return m_cameraPosition; }
 	@property void cameraPosition(Vector2f value)	{ m_cameraPosition = value; }
+
+	@property void resolution(Vector2f value)		{ m_resolution = value; }
 
 private:
 	static immutable int leftBarWidth = 200;

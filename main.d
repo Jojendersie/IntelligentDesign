@@ -28,6 +28,11 @@ void main(string[] args)
             {
                 window.close();
             }
+			else if(event.type == event.EventType.Resized)
+			{
+				// overwrite the normal view behaviour - maybe the whole not-using-the-sfml-view was a bad idea...
+				window.view = new View(FloatRect(0, 0, window.size.x, window.size.y));
+			}
         }
 
 		game.update();
