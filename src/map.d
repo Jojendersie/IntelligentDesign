@@ -36,7 +36,7 @@ class Map
 			{
 				ubyte greyVal = cast(ubyte)(127.5f * m_ground[x][y] + 127.5f);
 				if( isLand(Vector2f(x, y)) )
-					rectangleShape.fillColor = Color(0, greyVal, 0);
+					rectangleShape.fillColor = Color(greyVal/2, greyVal*3/4, 0);
 				else 
 					rectangleShape.fillColor = Color(0, 0, greyVal);
 				rectangleShape.position = screenManager.relativeCoorToScreenCoor(Vector2f(x,y));
