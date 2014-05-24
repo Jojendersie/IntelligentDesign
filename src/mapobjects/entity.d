@@ -131,6 +131,7 @@ class Entity: MapObject
 		{
 			if( other != this )
 			{
+				// Standard attraction weighting
 				Vector2f dir = other.position - position;
 				float attr = attraction(other);
 				float distSq = (dir.x*dir.x + dir.y*dir.y);
@@ -139,14 +140,29 @@ class Entity: MapObject
 				if( distSq <= 0.3f )
 				{
 					Entity e = cast(Entity)other;
-					if( e !is null && e.m_species == m_species)
+					if( e !is null )
 					{
-						if( e.canHaveSex() && canHaveSex())
+						if( m_species == m_species )
 						{
-							map.addObject( new Entity(this, e) );
+							// Have sex.
+							if( e.canHaveSex() && canHaveSex())
+							{
+								map.addObject( new Entity(this, e) );
+							}
+						} else {
+							// Fight enemy.
+							if( fight(e) == 1 )
+							{
+								m_vitality += getFoodValue(other);
+								other.removed = true;
+							} else {
+								e.m_vitality += e.getFoodValue(this);
+								removed = true;
+							}
 						}
 					} else {
-						float foodValue = getFootValue(other);
+						// Just eat it.
+						float foodValue = getFoodValue(other);
 						if( foodValue > 0.0f )
 						{
 							m_vitality += foodValue;
@@ -259,30 +275,47 @@ private:
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
-			if( e.species != m_species ) return -1.0f;	// Enemy
+			if( e.species != m_species ) return getFoodValue(other) * fight(e);	// Enemy
 			return e.canHaveSex() ? likesSex : 0.0f;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return p.getEnergy() * (1.0f - likesSex * 0.75f);
+			return getFoodValue(other) * (1.0f - likesSex * 0.75f);
 		}
 		return 0.0f;
 	}
 
+	// Return 1 if 'this' wins and -1 if enemy wins.
+	int fight(Entity enemy)
+	{
+		// Check all properties - if one has more attack -> win
+		if( enemy.m_properties.spiky > m_properties.spikeResistence ) return -1;
+		if( enemy.m_properties.poisonous > m_properties.poisonResistence) return -1;
+		if( m_properties.spiky > enemy.m_properties.spikeResistence ) return 1;
+		if( m_properties.poisonous > enemy.m_properties.poisonResistence ) return 1;
+		
+		// Decide probabilistic
+		float winChance = m_properties.carnivore / cast(float)(m_properties.carnivore + enemy.m_properties.carnivore);
+		if( winChance < uniform(0.0f, 1.0f) ) return -1;
+		else return 1;
+	}
+
 	// Compute the gain of eating something
-	float getFootValue(MapObject other)
+	float getFoodValue(MapObject other)
 	{
 		Entity e = cast(Entity)other;
 		if( e !is null && e.m_species != m_species )
 		{
 			// todo fight?
-			return e.m_vitality * 0.8f;
+			float carnival = m_properties.carnivore / 3.0f;
+			return e.m_vitality * carnival;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return p.getEnergy();
+			float herbival = m_properties.herbivore / 3.0f;
+			return p.getEnergy() * herbival;
 		}
 
 		return 0.0f;
