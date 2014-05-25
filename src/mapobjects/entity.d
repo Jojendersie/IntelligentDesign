@@ -44,9 +44,10 @@ class Entity: MapObject
 		// One mutation for each
 		m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(pool, 1)[0];
 		int slot = uniform(0,m_geneSlots.length-1);
-		m_species.decreaseGene(selfParent.m_geneSlots[slot]);
+	
+		selfParent.removeGenes();
 		selfParent.m_geneSlots[slot] = chooseGenes(pool, 1)[0];
-		m_species.increaseGene(selfParent.m_geneSlots[slot]);
+		selfParent.updatePropertiesAndReportGenes();
 
 		updatePropertiesAndReportGenes();
 	}
@@ -139,9 +140,12 @@ class Entity: MapObject
 	float getRadius() const	{ return m_entityRadius * (1.0f + log(m_vitality / 100.0f + 1.0f)); }
 
 
-	override void render(RenderWindow window, const ScreenManager screenManager)
+
+	override void render(RenderWindow window, const ScreenManager screenManager, int stepCount)
 	{
-		m_displayRadius = getRadius();
+		float breath = log(cast(float)fmax(0, m_land ? m_prefersLand : -m_prefersLand) + 1);
+		m_displayRadius = getRadius() + sin((++stepCount + cast(int)&this) * 0.2 + ) * breath * 0.1;
+
 		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius),
 										   m_species.isPlayer ? 3 : 10);
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_displayRadius));
@@ -150,6 +154,7 @@ class Entity: MapObject
 		{
 			circleShape.outlineColor = m_species.color * 1.2f;
 			circleShape.outlineThickness = 2.5f;
+			circleShape.radius = circleShape.radius - circleShape.outlineThickness * 2;
 		}
 		window.draw(circleShape);
 	}
@@ -159,8 +164,10 @@ class Entity: MapObject
 	{
 		++m_numStepsSinceAngleChange;
 
+		m_land = map.isLand(m_position);
+
 		// Die?
-		if( map.isLand(m_position) )
+		if( m_land )
 			m_vitality += properties.vitalityLand * m_vitalityLossFactor;
 		else
 			m_vitality += properties.vitalityWater * m_vitalityLossFactor;
@@ -228,8 +235,7 @@ class Entity: MapObject
 		Xorshift rnd;
 		// Use some property values to increase the diversity
 		rnd.seed(m_properties.vitalityWater + m_properties.vitalityLand);
-		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 0.5f
-			+ (m_properties.velocityLand - m_properties.velocityWater) * 0.15f;
+		
 		// Take 16 random samples in a circle and check for land / water
 		for( int i = 0; i < 8; ++i )
 		{
@@ -240,8 +246,8 @@ class Entity: MapObject
 			float factor = 0.0f;
 			if( map.isOnMap(m_position + directionScaled) && map.isOnMap(m_position - directionScaled) ) 
 			{
-				factor = map.sampleGround(m_position + directionScaled) * prefersLand;
-				factor -= map.sampleGround(m_position - directionScaled) * prefersLand;
+				factor = map.sampleGround(m_position + directionScaled) * m_prefersLand;
+				factor -= map.sampleGround(m_position - directionScaled) * m_prefersLand;
 			}
 			targetingDirection += direction * factor / fmax(radius, 1e-10f);
 		}
@@ -259,7 +265,7 @@ class Entity: MapObject
 		float currentAngle = lerp(m_aimedWalkAngleLast, m_aimedWalkAngleCurrent, cast(float)(m_numStepsSinceAngleChange) / m_numStepsSameWalkAim);
 		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));
 		direction = normalize(lerp(targetingDirection, direction, m_randomWalkWeight));
-		if(map.isLand(m_position))
+		if(m_land)
 			direction *= m_properties.velocityLand + properties.carnivore * 0.1f;
 		else
 			direction *= m_properties.velocityWater + properties.carnivore * 0.1f;
@@ -308,6 +314,9 @@ private:
 			m_species.increaseGene(gene);
 			m_properties = m_properties + gene.properties;
 		}
+
+		m_prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 0.5f
+						+ (m_properties.velocityLand - m_properties.velocityWater) * 0.15f;
 	}
 
 	// shared constructor part
@@ -387,6 +396,10 @@ private:
 	float m_aimedWalkAngleLast;
 	float m_aimedWalkAngleCurrent;
 	int m_numStepsSinceAngleChange;
+
+	float m_prefersLand = 0.0f;
+
+	bool m_land;
 
 	enum int m_numStepsSameWalkAim = 100;
 

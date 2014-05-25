@@ -48,6 +48,7 @@ class Map
 		window.draw(m_groundSprite);
 
 		// draw all entites
+		++m_turnCounter;
 		foreach(mapObject; m_mapObjects)
 		{
 			if(visibleGameArea_UnitsMin.x < mapObject.position.x + mapObject.displayRadius &&
@@ -55,7 +56,7 @@ class Map
 			   visibleGameArea_UnitsMax.x > mapObject.position.x &&
 			   visibleGameArea_UnitsMax.y > mapObject.position.y)
 			{
-				mapObject.render(window, screenManager);
+				mapObject.render(window, screenManager, m_turnCounter);
 
 				// draw circles for entities
 				Entity entity = cast(Entity)mapObject;
@@ -313,6 +314,7 @@ private:
 	enum uint m_turnsPerPlantSpawn = 3;
 
 	uint m_turnsSinceLastPlantSpawn = 0;
+	uint m_turnCounter = 0;
 
 	bool m_attracting = false;
 	Vector2f m_attractionPos;

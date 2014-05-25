@@ -9,7 +9,10 @@ enum real timePerFrameSeconds = 1.0f / 60.0f;
 
 void main(string[] args)
 {
-	auto window = new RenderWindow(VideoMode(1400, 768),"Intelligent Design!");
+	ContextSettings settings;
+	settings.antialiasingLevel = 0;
+
+	auto window = new RenderWindow(VideoMode(1400, 768),"Intelligent Design!", );
 	auto game = new Game(window);
 	StopWatch sw;
 

@@ -11,7 +11,7 @@ class Species
 		if( isPlayer )
 			m_color = Color(255, 144, 1);
 		else
-			m_color = Color(cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
+			m_color = Color(cast(ubyte)uniform(0,150), cast(ubyte)uniform(0,255), cast(ubyte)uniform(0,255));
 		m_isPlayer = isPlayer;
 
 		foreach(gene; Game.globalGenePool())
