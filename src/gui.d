@@ -213,6 +213,19 @@ class GUI
 		timeString ~= to!dstring(seconds);
 		score.setString(to!dstring(timeString));
 		window.draw(score);
+
+		if(species.totalEnergy <= 0.0f)
+		{
+			rectangleShape.fillColor = Color(20, 20, 20, 100);
+			rectangleShape.position = Vector2f(0.0f, 0.0f);
+			rectangleShape.size = Vector2f(window.size.x, window.size.y);
+			window.draw(rectangleShape);
+
+			score.position = Vector2f(window.size.x/2 - 500, window.size.y / 2 - 100);
+			score.setCharacterSize(80);
+			score.setString("INTELLIGENT DESIGN FAILED");
+			window.draw(score);
+		}
 	}
 
 	void updateHoverObject(MapObject obj)
