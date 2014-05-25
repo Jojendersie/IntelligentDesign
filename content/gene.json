@@ -13,20 +13,23 @@
 			"spikeResistence": 0,
 			"herbivore": 1,
 			"carnivore": 1,
-			"viewDistance": 4,
-			"vitality": -1
+			"viewDistance": 4
 		},
 		{
 			"name": "Legs",
 			"image": "leg.png",
 			"velocityLand": 2,
-			"vitality": -2
+			"velocityWater": 1,
+			"vitalityLand": -2,
+			"vitalityWater": -1
 		},
 		{
 			"name": "Fins",
 			"image": "fin.png",
+			"velocityLand": 1,
 			"velocityWater": 2,
-			"vitality": -2
+			"vitalityLand": -1,
+			"vitalityWater": -2
 		},
 		{
 			"name": "Eyes",
@@ -36,12 +39,12 @@
 		{
 			"name": "Lung",
 			"image": "lung.png",
-			"vitalityLand": 5
+			"vitalityLand": 4
 		},
 		{
 			"name": "Gill",
 			"image": "gill.png",
-			"vitalityWater": 5
+			"vitalityWater": 4
 		},
 		{
 			"name": "Poisonous",

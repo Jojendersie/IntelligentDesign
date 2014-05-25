@@ -141,7 +141,6 @@ class Entity: MapObject
 		++m_numStepsSinceAngleChange;
 
 		// Die?
-		m_vitality += properties.vitality * m_vitalityLossFactor;
 		if( map.isLand(m_position) )
 			m_vitality += properties.vitalityLand * m_vitalityLossFactor;
 		else
@@ -209,7 +208,7 @@ class Entity: MapObject
 		// Evaluate landscape
 		Xorshift rnd;
 		// Use some property values to increase the diversity
-		rnd.seed(m_properties.vitality + m_properties.vitalityWater + m_properties.vitalityLand);
+		rnd.seed(m_properties.vitalityWater + m_properties.vitalityLand);
 		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 0.5f
 			+ (m_properties.velocityLand - m_properties.velocityWater) * 0.15f;
 		float maxViewDistance = m_properties.viewDistance * m_viewDistanceMultiplier;
@@ -243,9 +242,9 @@ class Entity: MapObject
 		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));
 		direction = normalize(lerp(targetingDirection, direction, m_randomWalkWeight));
 		if(map.isLand(m_position))
-			direction *= m_properties.velocityLand;
+			direction *= m_properties.velocityLand + properties.carnivore * 0.1f;
 		else
-			direction *= m_properties.velocityWater;
+			direction *= m_properties.velocityWater + properties.carnivore * 0.1f;
 
 
 		m_position += direction * m_speedMultiplier;
@@ -379,5 +378,5 @@ private:
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
-	enum float m_attractionPointFactor = 10.0f;
+	enum float m_attractionPointFactor = 14.0f;
 }

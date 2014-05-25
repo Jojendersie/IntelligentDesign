@@ -13,7 +13,6 @@ struct Properties
 	int herbivore;			// Can eat plants
 	int carnivore;			// Can eat other animals
 	int viewDistance;		// How far can this unit see
-	int vitality;			// Consumption ot gain of vitality
 
 	Properties opBinary(string op)(Properties rhs)
 	{
@@ -31,7 +30,6 @@ struct Properties
 			results.herbivore = herbivore + rhs.herbivore;
 			results.carnivore = carnivore + rhs.carnivore;
 			results.viewDistance = viewDistance + rhs.viewDistance;
-			results.vitality = vitality + rhs.vitality;
 		}
 		else static if (op == "-")
 		{
@@ -46,7 +44,6 @@ struct Properties
 			results.herbivore = herbivore - rhs.herbivore;
 			results.carnivore = carnivore - rhs.carnivore;
 			results.viewDistance = viewDistance - rhs.viewDistance;
-			results.vitality = vitality - rhs.vitality;
 		}
 		else
 			static assert(0, "Operator "~op~" not implemented");
@@ -61,8 +58,8 @@ struct Properties
 		if(velocityWater != 0 || velocityLand != 0)
 			description ~= "Velocity (Land/Water): " ~ to!string(velocityLand) ~ "/" ~ to!string(velocityWater) ~ " | ";
 
-		if(vitalityLand + vitality != 0 || vitalityWater + vitality != 0)
-			description ~= "Vitality (Land/Water): " ~ to!string(vitalityLand + vitality) ~ "/" ~ to!string(vitalityWater + vitality) ~ " | ";
+		if(vitalityLand != 0 || vitalityWater != 0)
+			description ~= "Vitality (Land/Water): " ~ to!string(vitalityLand) ~ "/" ~ to!string(vitalityWater) ~ " | ";
 
 		if(poisonous != 0 || poisonResistence != 0)
 			description ~= "Poison (Att/Def): " ~ to!string(poisonous) ~ "/" ~ to!string(poisonResistence) ~ " | ";

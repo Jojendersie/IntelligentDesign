@@ -34,8 +34,6 @@ class Gene
 	    if( val != null ) m_properties.carnivore		= cast(int)val.integer;
 		val = "viewDistance" in data;
 	    if( val != null ) m_properties.viewDistance		= cast(int)val.integer;
-		val = "vitality" in data;
-		if( val != null ) m_properties.vitality			= cast(int)val.integer;
 	}
 
 	@property string name() const { return m_name; }
