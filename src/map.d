@@ -39,6 +39,10 @@ class Map
 		
 		m_groundShader = new Shader();
 		m_groundShader.loadFromFile("content/mapshader.vert", "content/mapshader.frag");
+		m_groundNoise = new Texture();
+		m_groundNoise.loadFromFile("content/noise.png");
+		m_groundNoise.setRepeated(true);
+		m_groundNoise.setSmooth(true);
 	}
 
 	void render(RenderWindow window, const ScreenManager screenManager, Vector2f mouseWorldCor)
@@ -53,6 +57,8 @@ class Map
 		m_groundSprite.scale = Vector2f(screenManager.relativeLengthToScreenLength(m_ground.length) / m_groundTexture.getSize().x, 
 										screenManager.relativeLengthToScreenLength(m_ground[0].length) / m_groundTexture.getSize().y);
 		m_groundShader.setParameter("texture", Shader.CurrentTexture);
+		m_groundShader.setParameter("noise", m_groundNoise);
+
 		Shader.bind(m_groundShader);
 		window.draw(m_groundSprite);
 		Shader.bind(null);
@@ -315,7 +321,7 @@ private:
 				textureValues[(y * m_ground[0].length + x) * 4 + 0] = color.r;
 				textureValues[(y * m_ground[0].length + x) * 4 + 1] = color.g;
 				textureValues[(y * m_ground[0].length + x) * 4 + 2] = color.b;
-				textureValues[(y * m_ground[0].length + x) * 4 + 3] = cast(ubyte)(fmax(0, fmin(1, m_ground[x][y] * 0.5f + 0.5f)) * 255);//color.a;
+				textureValues[(y * m_ground[0].length + x) * 4 + 3] = cast(ubyte)(fmax(0, fmin(1, m_ground[x][y]*4 + 0.5f)) * 255);//color.a;
 			}
 		}
 		m_groundTexture.updateFromPixels(textureValues, m_ground.length, m_ground[0].length, 0, 0);
@@ -374,4 +380,5 @@ private:
 	Vector2f m_attractionPos;
 
 	Shader m_groundShader;
+	Texture m_groundNoise;
 }
