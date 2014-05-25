@@ -43,6 +43,10 @@ class Game
 
 	void update(RenderWindow window)
 	{
+		// reset all total energies of all species
+		foreach(s; m_allSpecies)
+			s.totalEnergy = 0.0f;
+
 		m_map.update();
 		
 		Vector2f mouseWorldPos = m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window));

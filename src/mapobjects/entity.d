@@ -264,6 +264,8 @@ class Entity: MapObject
 			m_aimedWalkAngleLast = uniform(0, 2 * PI);
 			m_aimedWalkAngleCurrent = uniform(0, 2 * PI);
 		}
+
+		m_species.totalEnergy = m_species.totalEnergy + m_vitality;
 	}
 
 	@property Properties properties() { return m_properties; }

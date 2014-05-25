@@ -5,7 +5,7 @@ import core.thread;
 import std.stdio;
 import std.string;
 
-immutable real timePerFrameSeconds = 1.0f / 60.0f;
+enum real timePerFrameSeconds = 1.0f / 60.0f;
 
 void main(string[] args)
 {

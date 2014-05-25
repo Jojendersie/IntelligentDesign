@@ -63,10 +63,15 @@ class Species
 	@property const(bool) isPlayer() const { return m_isPlayer; }
 
 	Vector2f origin;	// Spawn center
+
+	@property float totalEnergy() const { return m_totalEngergy;}
+	@property void totalEnergy(float value) { m_totalEngergy = value; }
+
 private:
 	// todo: add used genes and their priorities
 
 	GeneUsage[Gene] m_genes;
 	Color m_color;
 	bool m_isPlayer;
+	float m_totalEngergy = 0;
 }

@@ -6,6 +6,7 @@ import std.stdio;
 import std.conv;
 import std.algorithm;
 import mapobjects;
+import main;
 
 class GUI
 {
@@ -186,6 +187,32 @@ class GUI
 			count.setString(to!dstring(usage.num));
 			window.draw(count);
 		}
+
+		// score & Time
+		++m_passedSteps;
+		float passedTime = cast(float)(timePerFrameSeconds* m_passedSteps);
+		int minutes = cast(int)(passedTime / 60);
+		int seconds = cast(int)(passedTime - minutes * 60);
+
+		Text score = new Text();
+		score.setFont(m_infoFont);
+		score.setCharacterSize(40);
+		score.setColor(Color.White);
+
+		score.position = Vector2f(10, 10);
+		score.setString("TOTAL VITALITY: " ~ to!dstring(cast(int)species.totalEnergy));
+		window.draw(score);
+
+		score.position = Vector2f(10, 55);
+		dchar[] timeString = "TIME "d.dup;
+		if(minutes < 10)
+			timeString ~= "0"d;
+		timeString ~= to!dstring(minutes) ~ ":"d;
+		if(seconds < 10)
+			timeString ~= "0"d;
+		timeString ~= to!dstring(seconds);
+		score.setString(to!dstring(timeString));
+		window.draw(score);
 	}
 
 	void updateHoverObject(MapObject obj)
@@ -204,4 +231,6 @@ private:
 	Font m_infoFont;
 	Text m_messageTopic;
 	Text m_messageInfo;
+
+	int m_passedSteps = 0;
 }
