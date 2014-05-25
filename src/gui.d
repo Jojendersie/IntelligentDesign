@@ -188,8 +188,23 @@ class GUI
 			window.draw(count);
 		}
 
+		// Check
+		char[] what;
+		float enemyEnergy = 0.0f;
+		foreach( spec; species )
+		{
+			if(spec.isPlayer && spec.totalEnergy <= 0.0f)
+				what = "INTELLIGENT DESIGN FAILED".dup;
+			else
+				enemyEnergy += spec.totalEnergy;
+		}
+		// Won
+		if( enemyEnergy <= 0.0f )
+			what = "GOD LIKE".dup;
+
 		// score & Time
-		++m_passedSteps;
+		if( species[0].totalEnergy > 0.0f && enemyEnergy > 0.0f )
+			++m_passedSteps;
 		float passedTime = cast(float)(timePerFrameSeconds* m_passedSteps);
 		int minutes = cast(int)(passedTime / 60);
 		int seconds = cast(int)(passedTime - minutes * 60);
@@ -214,20 +229,7 @@ class GUI
 		score.setString(to!dstring(timeString));
 		window.draw(score);
 
-		// Game Over
-		char[] what;
-		float enemyEnergy = 0.0f;
-		foreach( spec; species )
-		{
-			if(spec.isPlayer && spec.totalEnergy <= 0.0f)
-				what = "INTELLIGENT DESIGN FAILED".dup;
-			else
-				enemyEnergy += spec.totalEnergy;
-		}
-		// Won
-		if( enemyEnergy <= 0.0f )
-			what = "GOD LIKE".dup;
-
+		// Show Game Over / Won
 		if( what.length > 0 )
 		{
 			rectangleShape.fillColor = (enemyEnergy <= 0.0f) ? Color(230, 230, 200, 100) : Color(20, 20, 20, 100);
