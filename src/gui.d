@@ -193,8 +193,11 @@ class GUI
 		float enemyEnergy = 0.0f;
 		foreach( spec; species )
 		{
-			if(spec.isPlayer && spec.totalEnergy <= 0.0f)
-				what = "INTELLIGENT DESIGN FAILED".dup;
+			if(spec.isPlayer)
+			{
+				if(spec.totalEnergy <= 0.0f)
+					what = "INTELLIGENT DESIGN FAILED".dup;
+			}
 			else
 				enemyEnergy += spec.totalEnergy;
 		}
