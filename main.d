@@ -52,6 +52,6 @@ void main(string[] args)
 			core.thread.Thread.sleep(dur!("nsecs")(cast(long)((timePerFrameSeconds - frameTimeSeconds) * 1000000000)));
 		}
 		//writeln("Waiting ", (timePerFrameSeconds - frameTimeSeconds));
-		//writeln("fps ", 1.0 / frameTimeSeconds);
+		writeln("fps ", 1.0 / frameTimeSeconds);
 	}
 }

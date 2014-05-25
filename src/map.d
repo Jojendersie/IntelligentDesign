@@ -49,7 +49,15 @@ class Map
 
 		// draw all entites
 		foreach(mapObject; m_mapObjects)
-			mapObject.render(window, screenManager);
+		{
+			if(visibleGameArea_UnitsMin.x < mapObject.position.x + mapObject.displayRadius &&
+			   visibleGameArea_UnitsMin.y < mapObject.position.y + mapObject.displayRadius &&
+			   visibleGameArea_UnitsMax.x > mapObject.position.x &&
+			   visibleGameArea_UnitsMax.y > mapObject.position.y)
+			{
+			   mapObject.render(window, screenManager);
+			}
+		}
 	}
 
 	void update()
