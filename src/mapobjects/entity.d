@@ -390,8 +390,8 @@ private:
 	int fight(Entity enemy, bool simulate)
 	{
 		// Check all properties - if one has more attack -> win
-		int beats = enemy.m_properties.melee - m_properties.melee;
-		beats = enemy.m_properties.poisonous - m_properties.poisonous;
+		int beats = m_properties.melee - enemy.m_properties.melee;
+		beats = m_properties.poisonous - enemy.m_properties.poisonous;
 
 		if( simulate ) return beats;
 		if( beats != 0 ) return beats;
