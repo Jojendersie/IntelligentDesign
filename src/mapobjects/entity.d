@@ -108,7 +108,7 @@ class Entity: MapObject
 			if( !contained )
 			{
 				genePoolCpy ~= genePool[pgene];
-				totalPriority += m_species.genes()[genePool[pgene]].priority.y;
+				totalPriority += m_species.genes()[genePool[pgene]].priority.y + 0.2f;
 			}
 		}
 		for(int i=0; i<numGenesToChoose; ++i)
@@ -120,7 +120,7 @@ class Entity: MapObject
 			{
 				if(genePoolCpy[pgene] is null)
 					continue;
-				float currentPrio = m_species.genes()[genePoolCpy[pgene]].priority.y;
+				float currentPrio = m_species.genes()[genePoolCpy[pgene]].priority.y + 0.2f;
 				currentPrioritySum += currentPrio;
 				if(currentPrioritySum >= choosenGene)
 				{
@@ -289,12 +289,16 @@ class Entity: MapObject
 		}
 
 		// attraction to mouse
+		float cursorBoost = 0.0f;
 		if(m_species.isPlayer && map.attracting)
 		{
 			Vector2f toAttraction = map.attractionPos - m_position;
 			float attractionDist = toAttraction.length();
 			if(attractionDist < maxViewDistance*2)
+			{
 				targetingDirection += toAttraction * (m_attractionPointFactor / attractionDist);
+				cursorBoost = 0.85f;
+			}
 		}
 
 		// interpolate direction and move
@@ -302,9 +306,9 @@ class Entity: MapObject
 		Vector2f direction = Vector2f(sin(currentAngle), cos(currentAngle));
 		direction = normalize(lerp(targetingDirection, direction, m_randomWalkWeight));
 		if(m_land)
-			direction *= m_properties.velocityLand + properties.carnivore * 0.1f;
+			direction *= m_properties.velocityLand + properties.carnivore * 0.1f + cursorBoost;
 		else
-			direction *= m_properties.velocityWater + properties.carnivore * 0.1f;
+			direction *= m_properties.velocityWater + properties.carnivore * 0.1f + cursorBoost;
 
 
 		m_position += direction * m_speedMultiplier;

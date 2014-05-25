@@ -139,7 +139,7 @@ class GUI
 		window.draw(rectangleShape);
 
 		// lower bar
-		rectangleShape.fillColor = Color.Black;
+		rectangleShape.fillColor = Color(species[0].color.a / 4, species[0].color.g / 4, species[0].color.b / 4, 255);
 		rectangleShape.position = Vector2f(0, window.size.y - screenManager.lowerBarHeight);
 		rectangleShape.size = Vector2f(window.size.x, screenManager.lowerBarHeight);
 		window.draw(rectangleShape);

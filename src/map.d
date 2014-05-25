@@ -10,6 +10,7 @@ import std.algorithm;
 import std.random;
 import std.array;
 import std.stdio;
+import std.container;
 
 class Map
 {
@@ -57,7 +58,7 @@ class Map
 		Shader.bind(null);
 
 		// draw all entites
-		//++m_turnCounter;
+		++m_turnCounter;
 		int numDrawn = 0;
 		foreach(mapObject; m_mapObjects)
 		{
@@ -106,6 +107,7 @@ class Map
 											   uniform(0.0f, nextDown(cast(float)m_ground[0].length-1))));
 		}
 
+		recreateCellGrid();
 		for(int i = 0; i < m_mapObjects.length; ++i )
 			if( !m_mapObjects[i].removed )
 				m_mapObjects[i].update(this);
@@ -171,30 +173,37 @@ class Map
 	MapObject[] queryObjects(Vector2f pos, float maxDistance)
 	{
 		MapObject[] query;
+		float maxDistanceSq = maxDistance * maxDistance;
 		// Get a rectangle which contains the circle
-		/*int minCellX = max(0, cast(int)(pos.x - maxDistance));
-		int maxCellX = min(m_ground.length-1, cast(int)(pos.x + maxDistance + 1));
-		int minCellY = max(0, cast(int)(pos.y - maxDistance));
-		int maxCellY = min(m_ground[0].length-1, cast(int)(pos.y + maxDistance + 1));
+		int minCellX = max(0, cast(int)((pos.x - maxDistance)/m_unitsPerCell));
+		int maxCellX = min(m_cellGrid.length, cast(int)((pos.x + maxDistance)/m_unitsPerCell + 1));
+		int minCellY = max(0, cast(int)((pos.y - maxDistance)/m_unitsPerCell));
+		int maxCellY = min(m_cellGrid[0].length, cast(int)((pos.y + maxDistance)/m_unitsPerCell + 1));
 
 		// Iterate over all cells and take the objects in range
 		for( int x = minCellX; x < maxCellX; ++x )
 		{
 			for( int y = minCellY; y < maxCellY; ++y )
 			{
-				foreach(m_mapObjects)
+				foreach(object; m_cellGrid[x][y])
+				{
+					if( !object.removed && lengthSq(object.position - pos) <= maxDistanceSq)
+					{
+						query ~= object;
+					}
+				}
 			}
-		}*/
+		}
 
 		// Brute force search
-		float maxDistanceSq = maxDistance * maxDistance;
+		/*
 		foreach(obj; m_mapObjects)
 		{
 			if( !obj.removed && lengthSq(obj.position - pos) <= maxDistanceSq)
 			{
 				query ~= obj;
 			}
-		}
+		}*/
 
 		return query;
 	}
@@ -255,8 +264,13 @@ class Map
 	}
 
 private:
-	// Each cell is one unit large!
-	float[100][100] m_ground;
+	// Each visual cell is one unit large!
+	enum int mapSizeX = 100;
+	enum int mapSizeY = 100;
+	float[mapSizeX][mapSizeY] m_ground;
+	// All four units there is a logical grid cell
+	enum int m_unitsPerCell = 4;
+	SList!MapObject[mapSizeX/m_unitsPerCell][mapSizeY/m_unitsPerCell] m_cellGrid;
 	MapObject[] m_mapObjects;
 	MapObject[] m_newObjects;
 	Texture m_groundTexture;
@@ -328,6 +342,22 @@ private:
 
 				m_mapObjects ~= new Entity(s, entityPos);
 			}
+		}
+	}
+
+	void recreateCellGrid()
+	{
+		// Clear all cells
+		for( int cx = 0; cx < m_cellGrid.length; ++cx )
+			for( int cy = 0; cy < m_cellGrid[0].length; ++cy )
+				m_cellGrid[cx][cy].clear();
+
+		// Insert all entities to the grid
+		foreach( object; m_mapObjects )
+		{
+			int ocx = max(0, min(m_cellGrid.length-1, cast(int)(object.position.x / m_unitsPerCell)));
+			int ocy = max(0, min(m_cellGrid[0].length-1, cast(int)(object.position.y / m_unitsPerCell)));
+			m_cellGrid[ocx][ocy].insert( object );
 		}
 	}
 
