@@ -11,7 +11,7 @@ class GUI
 {
 	this()
 	{
-		Font m_infoFont = new Font();
+		m_infoFont = new Font();
 		m_infoFont.loadFromFile("content/infofont.ttf");
 
 		m_messageTopic = new Text();
@@ -177,6 +177,14 @@ class GUI
 			}
 
 			window.draw(sprite);
+
+			Text count = new Text();
+			count.setFont(m_infoFont);
+			count.setCharacterSize(17);
+			count.setColor(Color.Black);
+			count.position = sprite.position + Vector2f(screenManager.geneDisplaySize - 10, screenManager.geneDisplaySize - 20);
+			count.setString(to!dstring(usage.num));
+			window.draw(count);
 		}
 	}
 
@@ -193,6 +201,7 @@ private:
 	Vector2i m_lastMouseCoord;
 	Species.GeneUsage* m_currentDraggingGene = null;
 
+	Font m_infoFont;
 	Text m_messageTopic;
 	Text m_messageInfo;
 }
