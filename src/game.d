@@ -39,7 +39,7 @@ class Game
 		m_screenManager.resolution = Vector2f(window.size().x, window.size().y); // brain-dead simple: If the resolution change, our game can handle this ;D
 		
 		m_map.render(window, m_screenManager, m_mouseWorldPos);
-		m_gui.render(window, m_screenManager, m_playerSpecies);
+		m_gui.render(window, m_screenManager, m_allSpecies);
 	}
 
 	void update(RenderWindow window)

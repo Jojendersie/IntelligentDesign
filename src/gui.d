@@ -127,12 +127,13 @@ class GUI
 		}
 	}
 
-	void render(RenderWindow window, const ScreenManager screenManager, const Species species)
+	void render(RenderWindow window, const ScreenManager screenManager, const Species[] species)
 	{
+		assert( species[0].isPlayer() );
 		auto rectangleShape = new RectangleShape();
 
 		// right bar
-		rectangleShape.fillColor = species.color;
+		rectangleShape.fillColor = species[0].color;
 		rectangleShape.position = Vector2f(window.size.x - screenManager.geneBarWidth, 0);
 		rectangleShape.size = Vector2f(screenManager.geneBarWidth, window.size.y);
 		window.draw(rectangleShape);
@@ -147,11 +148,10 @@ class GUI
 		window.draw(m_messageTopic);
 		window.draw(m_messageInfo);
 
-
 		// The genes
-		foreach_reverse( gene; species.genes.keys )
+		foreach_reverse( gene; species[0].genes.keys )
 		{
-			const Species.GeneUsage* usage = &species.genes[gene];
+			const Species.GeneUsage* usage = &species[0].genes[gene];
 			
 			Sprite sprite = new Sprite(gene.texture());
 			//writeln(usage.priority.x * (screenManager.geneBarWidth - 64) + 32 + screenManager.geneBarX);
@@ -200,7 +200,7 @@ class GUI
 		score.setColor(Color.White);
 
 		score.position = Vector2f(10, 10);
-		score.setString("TOTAL VITALITY: " ~ to!dstring(cast(int)species.totalEnergy));
+		score.setString("TOTAL VITALITY: " ~ to!dstring(cast(int)species[0].totalEnergy));
 		window.draw(score);
 
 		score.position = Vector2f(10, 55);
@@ -214,16 +214,30 @@ class GUI
 		score.setString(to!dstring(timeString));
 		window.draw(score);
 
-		if(species.totalEnergy <= 0.0f)
+		// Game Over
+		char[] what;
+		float enemyEnergy = 0.0f;
+		foreach( spec; species )
 		{
-			rectangleShape.fillColor = Color(20, 20, 20, 100);
+			if(spec.isPlayer && spec.totalEnergy <= 0.0f)
+				what = "INTELLIGENT DESIGN FAILED".dup;
+			else
+				enemyEnergy += spec.totalEnergy;
+		}
+		// Won
+		if( enemyEnergy <= 0.0f )
+			what = "GOD LIKE".dup;
+
+		if( what.length > 0 )
+		{
+			rectangleShape.fillColor = (enemyEnergy <= 0.0f) ? Color(230, 230, 200, 100) : Color(20, 20, 20, 100);
 			rectangleShape.position = Vector2f(0.0f, 0.0f);
 			rectangleShape.size = Vector2f(window.size.x, window.size.y);
 			window.draw(rectangleShape);
 
 			score.position = Vector2f(window.size.x/2 - 500, window.size.y / 2 - 100);
 			score.setCharacterSize(80);
-			score.setString("INTELLIGENT DESIGN FAILED");
+			score.setString(to!dstring(what));
 			window.draw(score);
 		}
 	}

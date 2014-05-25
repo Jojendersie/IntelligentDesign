@@ -374,7 +374,7 @@ private:
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
-			if( e.species != m_species ) return getFoodValue(other) * fight(e, true);	// Enemy
+			if( e.species != m_species ) return getFoodValue(other) * fight(e, true) * 0.4f;	// Enemy
 			return e.canHaveSex() ? (likesSex * 2.5f) : 0.0f;
 		}
 		Plant p = cast(Plant)other;
@@ -446,7 +446,7 @@ private:
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
-	enum float m_attractionPointFactor = 14.0f;
+	enum float m_attractionPointFactor = 20.0f;
 
 	static Texture m_spikeTexture;
 	static Texture m_poisonTexture;
