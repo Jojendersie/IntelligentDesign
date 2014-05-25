@@ -25,6 +25,12 @@ class GUI
 		m_messageInfo.setFont(m_infoFont);
 		m_messageInfo.setCharacterSize(20);
 		m_messageInfo.setColor(Color.White);
+
+		Texture barTex = new Texture(); 
+		barTex.loadFromFile("content/priotityBar.png");
+		barTex.setSmooth(true);
+		m_priorityBar = new Sprite;
+		m_priorityBar.setTexture(barTex);
 	}
 
 	void update(ScreenManager screenManager, Window window, Species species)
@@ -133,10 +139,14 @@ class GUI
 		auto rectangleShape = new RectangleShape();
 
 		// right bar
-		rectangleShape.fillColor = species[0].color;
+		m_priorityBar.position = Vector2f(window.size.x - screenManager.geneBarWidth, 0);
+		float yscale = (window.size.y - screenManager.lowerBarHeight) / cast(float)m_priorityBar.getTexture().getSize().y;
+		m_priorityBar.scale = Vector2f(1.0f, yscale );
+		window.draw(m_priorityBar);
+		/*rectangleShape.fillColor = species[0].color;
 		rectangleShape.position = Vector2f(window.size.x - screenManager.geneBarWidth, 0);
 		rectangleShape.size = Vector2f(screenManager.geneBarWidth, window.size.y);
-		window.draw(rectangleShape);
+		window.draw(rectangleShape);*/
 
 		// lower bar
 		rectangleShape.fillColor = Color(species[0].color.a / 4, species[0].color.g / 4, species[0].color.b / 4, 255);
@@ -157,7 +167,7 @@ class GUI
 			//writeln(usage.priority.x * (screenManager.geneBarWidth - 64) + 32 + screenManager.geneBarX);
 			sprite.position = screenManager.getGeneDisplayScreenPos(usage.priority);
 			sprite.scale = Vector2f(1.0f, 1.0f);
-			sprite.color = (usage.num > 0 ? Color.White : Color(100,100,100,100));
+			sprite.color = (usage.num > 0 ? Color.White : Color(255,255,255,150));
 
 			// mark if hovered! 
 			if(m_hoveredObject !is null && cast(Entity)m_hoveredObject !is null)
@@ -182,9 +192,15 @@ class GUI
 			Text count = new Text();
 			count.setFont(m_infoFont);
 			count.setCharacterSize(17);
-			count.setColor(Color.Black);
-			count.position = sprite.position + Vector2f(screenManager.geneDisplaySize - 10, screenManager.geneDisplaySize - 20);
+			count.setColor(Color.White);
+			count.setStyle(Text.Style.Bold);
+			count.position = sprite.position + Vector2f(screenManager.geneDisplaySize - 19, screenManager.geneDisplaySize - 21);
 			count.setString(to!dstring(usage.num));
+			window.draw(count);
+			count.position = sprite.position + Vector2f(screenManager.geneDisplaySize - 18, screenManager.geneDisplaySize - 20);
+			window.draw(count);
+			count.setColor(Color.Black);
+			count.setStyle(Text.Style.Regular);
 			window.draw(count);
 		}
 
@@ -263,6 +279,7 @@ private:
 	Font m_infoFont;
 	Text m_messageTopic;
 	Text m_messageInfo;
+	Sprite m_priorityBar;
 
 	int m_passedSteps = 0;
 }
