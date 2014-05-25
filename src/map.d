@@ -33,6 +33,11 @@ class Map
 			m_mapObjects ~= new Plant(Vector2f(uniform(0.0f, nextDown(cast(float)m_ground.length-1)),
 											   uniform(0.0f, nextDown(cast(float)m_ground[0].length-1))));
 		}
+
+	
+		
+		m_groundShader = new Shader();
+		m_groundShader.loadFromFile("content/mapshader.vert", "content/mapshader.frag");
 	}
 
 	void render(RenderWindow window, const ScreenManager screenManager, Vector2f mouseWorldCor)
@@ -46,7 +51,10 @@ class Map
 		m_groundSprite.position = screenManager.relativeCoorToScreenCoor(Vector2f(0.0f, 0.0f));
 		m_groundSprite.scale = Vector2f(screenManager.relativeLengthToScreenLength(m_ground.length) / m_groundTexture.getSize().x, 
 										screenManager.relativeLengthToScreenLength(m_ground[0].length) / m_groundTexture.getSize().y);
+		m_groundShader.setParameter("texture", Shader.CurrentTexture);
+		Shader.bind(m_groundShader);
 		window.draw(m_groundSprite);
+		Shader.bind(null);
 
 		// draw all entites
 		//++m_turnCounter;
@@ -293,7 +301,7 @@ private:
 				textureValues[(y * m_ground[0].length + x) * 4 + 0] = color.r;
 				textureValues[(y * m_ground[0].length + x) * 4 + 1] = color.g;
 				textureValues[(y * m_ground[0].length + x) * 4 + 2] = color.b;
-				textureValues[(y * m_ground[0].length + x) * 4 + 3] = color.a;
+				textureValues[(y * m_ground[0].length + x) * 4 + 3] = cast(ubyte)(fmax(0, fmin(1, m_ground[x][y] * 0.5f + 0.5f)) * 255);//color.a;
 			}
 		}
 		m_groundTexture.updateFromPixels(textureValues, m_ground.length, m_ground[0].length, 0, 0);
@@ -334,4 +342,6 @@ private:
 
 	bool m_attracting = false;
 	Vector2f m_attractionPos;
+
+	Shader m_groundShader;
 }
