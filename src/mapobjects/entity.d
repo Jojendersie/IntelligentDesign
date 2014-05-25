@@ -90,6 +90,21 @@ class Entity: MapObject
 		return outputGenes;
 	}
 
+	// Do a cell division
+	this(Entity selfParent)
+	{
+		this();
+		m_species = selfParent.species;
+		m_position = selfParent.position;
+		m_geneSlots = selfParent.m_geneSlots;
+		m_vitality = selfParent.vitality * 0.25f;
+		selfParent.m_vitality *= 0.25f;
+		// One mutation for each
+		m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
+		selfParent.m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
+		updatePropertiesAndReportGenes();
+	}
+
 	~this()
 	{
 		foreach(gene; m_geneSlots)
@@ -186,6 +201,10 @@ class Entity: MapObject
 				}
 			}
 		}
+
+		// Self replicate?
+		if( m_vitality > m_selfReplicationThreshold )
+			map.addObject( new Entity(this) );
 
 		// Evaluate landscape
 		Xorshift rnd;
@@ -295,7 +314,7 @@ private:
 		Plant p = cast(Plant)other;
 		if( p !is null )
 		{
-			return getFoodValue(other) * (1.0f - likesSex * 0.75f);
+			return getFoodValue(other) * (1.0f - likesSex * 0.85f);
 		}
 		return 0.0f;
 	}
@@ -350,6 +369,7 @@ private:
 
 
 	enum float m_sexThreshold = 100.0f;
+	enum float m_selfReplicationThreshold = 360.0f;
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;

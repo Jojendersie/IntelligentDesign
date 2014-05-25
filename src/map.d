@@ -67,9 +67,9 @@ class Map
 			if( !m_mapObjects[i].removed )
 				m_mapObjects[i].update(this);
 
+		removeObjects();
 		m_mapObjects ~= m_newObjects;
 		m_newObjects.clear();
-		removeObjects();
 	}
 
 	bool isLand(Vector2f pos) const
