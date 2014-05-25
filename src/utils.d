@@ -13,10 +13,11 @@ T lerp(T)(T a, T b, float t)
 //
 // To create 1D or 2D samples just set the other dimensions to
 // a constant value.
+int valueNoiseSeed;
 float randomAt( int x, int y, int z )
 {
 	// Use states of xorshift to apply seeding
-	x ^= 0x7B4E10DC; y ^= 0x2D7C0472; z ^= 0x6B055F1D;
+	x ^= valueNoiseSeed; y ^= valueNoiseSeed; z ^= valueNoiseSeed;
 
 	int value = (x * 0x9E3719B1 - (z >> 17))
 		^ (y * 0xAFFE3141 - (x >> 17))

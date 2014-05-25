@@ -18,11 +18,12 @@ class Map
 	{
 		m_groundTexture = new Texture();
 		m_groundTexture.create(m_ground.length, m_ground[0].length);
-		m_groundTexture.setSmooth(false);
+		m_groundTexture.setSmooth(true);
 		m_groundTexture.setRepeated(false);
 		m_groundSprite = new Sprite();
 		m_groundSprite.setTexture(m_groundTexture);
 
+		valueNoiseSeed = unpredictableSeed();
 		generateGround();
 		startupSpeciesPopulate(species, globalGenePool);
 
@@ -80,6 +81,14 @@ class Map
 
 	void update()
 	{
+		// Recreate ground
+		++m_turnsSinceLastGroundUpdate;
+		if(m_turnsSinceLastGroundUpdate > m_turnsPerGroundUpdate)
+		{
+			generateGround();
+			m_turnsSinceLastGroundUpdate = 0;
+		}
+
 		// spawn a plant
 		++m_turnsSinceLastPlantSpawn;
 		if(m_turnsSinceLastPlantSpawn > m_turnsPerPlantSpawn)
@@ -247,6 +256,7 @@ private:
 
 	void generateGround()
 	{
+		static float maxAmplitude = 2 - 1.0f/(1 << 4);
 		for( int x = 0; x < m_ground.length; ++x )
 		{
 			for( int y = 0; y < m_ground[0].length; ++y )
@@ -256,10 +266,10 @@ private:
 				for( int oct = 0; oct < 5; ++oct )
 				{
 					// The randomAt-z component can be used to change the landscape over time
-					int scale = 1 << oct;
-					value += randomAt(x * 0.01f * scale, y * 0.01f * scale, 1.0f) / scale;
+					int frequency = 1 << oct;
+					value += randomAt(x * 0.01f * frequency, y * 0.01f * frequency, m_turnCounter * 0.0002f) / frequency;
 				}
-				m_ground[x][y] = value;
+				m_ground[x][y] = value / maxAmplitude;
 			}
 		}
 
@@ -316,8 +326,10 @@ private:
 	enum uint m_startPopNum = 1;
 	enum float m_startPopDistribution = 5.0f;
 	enum uint m_turnsPerPlantSpawn = 3;
+	enum uint m_turnsPerGroundUpdate = 30;
 
 	uint m_turnsSinceLastPlantSpawn = 0;
+	uint m_turnsSinceLastGroundUpdate = 0;
 	uint m_turnCounter = 0;
 
 	bool m_attracting = false;

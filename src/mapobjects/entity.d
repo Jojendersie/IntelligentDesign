@@ -157,7 +157,7 @@ class Entity: MapObject
 
 		if(m_properties.melee > 0)
 		{
-			float sizeWorld = m_displayRadius*2 + m_properties.melee * 0.5f;
+			float sizeWorld = m_displayRadius*2 + sqrt(cast(float)m_properties.melee) * 0.5f;
 			float sizePix = screenManager.relativeLengthToScreenLength(sizeWorld);
 			Sprite spikes = new Sprite();
 			spikes.setTexture(m_spikeTexture);
@@ -185,14 +185,14 @@ class Entity: MapObject
 
 		if(m_properties.poisonous > 0)
 		{
-			float sizeWorld = m_displayRadius + m_properties.poisonous * 0.5f;
+			float sizeWorld = m_displayRadius + sqrt(cast(float)m_properties.poisonous) * 0.5f;
 			float sizePix = screenManager.relativeLengthToScreenLength(sizeWorld);
 			Sprite poison = new Sprite();
 			poison.setTexture(m_poisonTexture);
 			poison.scale = Vector2f(sizePix / m_poisonTexture.getSize().x, sizePix / m_poisonTexture.getSize().y);
 			poison.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(sizeWorld/2, sizeWorld/2));
 			window.draw(poison);
-		}
+	}
 	}
 
 	// Observe the environment search a target and go one step.
@@ -375,7 +375,7 @@ private:
 		if( e !is null )
 		{
 			if( e.species != m_species ) return getFoodValue(other) * fight(e, true);	// Enemy
-			return e.canHaveSex() ? likesSex : 0.0f;
+			return e.canHaveSex() ? (likesSex * 2.5f) : 0.0f;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )

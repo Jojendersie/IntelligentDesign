@@ -47,7 +47,9 @@
 		{
 			"name": "Poisonous",
 			"image": "poison.png",
-			"poisonous": 1
+			"vitalityWater": -1,
+			"vitalityLand": -2,
+			"poisonous": 3
 		},
 		{
 			"name": "Antipoison",
@@ -57,7 +59,9 @@
 		{
 			"name": "Spikes",
 			"image": "spikes.png",
-			"melee": 1
+			"vitalityWater": -2,
+			"vitalityLand": -1,
+			"melee": 3
 		},
 		{
 			"name": "Armor",
