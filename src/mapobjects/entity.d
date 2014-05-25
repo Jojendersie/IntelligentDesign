@@ -97,8 +97,8 @@ class Entity: MapObject
 		m_species = selfParent.species;
 		m_position = selfParent.position;
 		m_geneSlots = selfParent.m_geneSlots;
-		m_vitality = selfParent.vitality * 0.25f;
-		selfParent.m_vitality *= 0.25f;
+		m_vitality = selfParent.vitality * 0.33f;
+		selfParent.m_vitality *= 0.33f;
 		// One mutation for each
 		m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
 		selfParent.m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
@@ -180,7 +180,7 @@ class Entity: MapObject
 							}
 						} else {
 							// Fight enemy.
-							if( fight(e) == 1 )
+							if( fight(e, false) == 1 )
 							{
 								m_vitality += getFoodValue(other);
 								other.removed = true;
@@ -218,14 +218,14 @@ class Entity: MapObject
 		{
 			float phi = uniform(0.0f, cast(float)PI*2.0f, rnd);
 			float radius = sqrt(uniform(0.00001f, 1.0f, rnd)) * maxViewDistance;
-			Vector2f direction = Vector2f(sin(phi), cos(phi)) * radius;
+			Vector2f direction = Vector2f(sin(phi), cos(phi));
+			Vector2f directionScaled = direction * radius;
 			float factor = 0.0f;
-			if( map.isOnMap(m_position + direction) && map.isOnMap(m_position - direction) ) 
+			if( map.isOnMap(m_position + directionScaled) && map.isOnMap(m_position - directionScaled) ) 
 			{
-				factor = map.isLand(m_position + direction) ? prefersLand : -prefersLand;
-				factor -= map.isLand(m_position - direction) ? prefersLand : -prefersLand;
+				factor = map.sampleGround(m_position + directionScaled) * prefersLand;
+				factor -= map.sampleGround(m_position - directionScaled) * prefersLand;
 			}
-			//else factor = 3.0f / (radius + 1e-10f);
 			targetingDirection += direction * factor / fmax(radius, 1e-10f);
 		}
 
@@ -308,7 +308,7 @@ private:
 		Entity e = cast(Entity)other;
 		if( e !is null )
 		{
-			if( e.species != m_species ) return getFoodValue(other) * fight(e);	// Enemy
+			if( e.species != m_species ) return getFoodValue(other) * fight(e, true);	// Enemy
 			return e.canHaveSex() ? likesSex : 0.0f;
 		}
 		Plant p = cast(Plant)other;
@@ -320,13 +320,18 @@ private:
 	}
 
 	// Return 1 if 'this' wins and -1 if enemy wins.
-	int fight(Entity enemy)
+	// In simulation mode the result can be 0 in case of a draw.
+	int fight(Entity enemy, bool simulate)
 	{
 		// Check all properties - if one has more attack -> win
-		if( enemy.m_properties.spiky > m_properties.spikeResistence ) return -1;
-		if( enemy.m_properties.poisonous > m_properties.poisonResistence) return -1;
-		if( m_properties.spiky > enemy.m_properties.spikeResistence ) return 1;
-		if( m_properties.poisonous > enemy.m_properties.poisonResistence ) return 1;
+		int beats = 0;
+		if( enemy.m_properties.spiky > m_properties.spikeResistence ) --beats;
+		if( enemy.m_properties.poisonous > m_properties.poisonResistence) --beats;
+		if( m_properties.spiky > enemy.m_properties.spikeResistence ) ++beats;
+		if( m_properties.poisonous > enemy.m_properties.poisonResistence ) ++beats;
+
+		if( simulate ) return beats;
+		if( beats != 0 ) return beats;
 		
 		// Decide probabilistic
 		float winChance = m_properties.carnivore / cast(float)(m_properties.carnivore + enemy.m_properties.carnivore);
@@ -342,7 +347,7 @@ private:
 		{
 			// todo fight?
 			float carnival = m_properties.carnivore / 3.0f;
-			return e.m_vitality * carnival;
+			return e.m_vitality * carnival * 1.7f;
 		}
 		Plant p = cast(Plant)other;
 		if( p !is null )
@@ -369,7 +374,7 @@ private:
 
 
 	enum float m_sexThreshold = 100.0f;
-	enum float m_selfReplicationThreshold = 360.0f;
+	enum float m_selfReplicationThreshold = 260.0f;
 	enum float m_speedMultiplier = 1.0f / 60.0f;
 	enum float m_viewDistanceMultiplier = 1.0f;
 	enum float m_randomWalkWeight = 0.3f;

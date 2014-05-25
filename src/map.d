@@ -197,6 +197,18 @@ class Map
 	@property Vector2f attractionPos() {return m_attractionPos;}
 
 
+	// Use bilinear sampling of a height map to get smoother borders
+	float sampleGround(Vector2f pos) const
+	{
+		clampToGame(pos);
+
+		int ix = cast(int)pos.x;
+		int iy = cast(int)pos.y;
+		float fx = pos.x - ix;
+		float fy = pos.y - iy;
+		return (m_ground[ix][iy] * (1.0f - fx) + m_ground[ix+1][iy] * fx) * (1.0f - fy) +
+			(m_ground[ix][iy+1] * (1.0f - fx) + m_ground[ix+1][iy+1] * fx) * fy;
+	}
 
 private:
 	// Each cell is one unit large!
@@ -205,25 +217,6 @@ private:
 	MapObject[] m_newObjects;
 	Texture m_groundTexture;
 	Sprite m_groundSprite;
-
-	// Use bilinear sampling of a height map to get smoother borders
-	float sampleGround(Vector2f pos) const
-	{
-		float a = pos.x;
-		float b = pos.y;
-		clampToGame(pos);
-		float c = pos.x;
-		float d = pos.y;
-
-		int ix = cast(int)pos.x;
-		int iy = cast(int)pos.y;
-		float fx = pos.x - ix;
-		float fy = pos.y - iy;
-		assert(ix >= 0 && ix < (m_ground.length-1));
-		assert(iy >= 0 && iy < (m_ground[0].length-1));
-		return (m_ground[ix][iy] * (1.0f - fx) + m_ground[ix+1][iy] * fx) * (1.0f - fy) +
-			   (m_ground[ix][iy+1] * (1.0f - fx) + m_ground[ix+1][iy+1] * fx) * fy;
-	}
 
 	void generateGround()
 	{

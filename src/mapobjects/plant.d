@@ -32,6 +32,6 @@ class Plant: MapObject
 private:
 	float m_age = 0.0f;
 
-	enum float m_plantEnergyMultiplyer = 40.0f;
+	enum float m_plantEnergyMultiplyer = 60.0f;
 	enum float sizeEnergyScale = 0.4f / m_plantEnergyMultiplyer;
 }

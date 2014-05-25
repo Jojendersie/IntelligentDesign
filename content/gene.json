@@ -3,8 +3,8 @@
 		{
 			"name": "ZeroGene",
 			"image": "zero.png",
-			"velocityWater": 1,
-			"velocityLand": 1,
+			"velocityWater": 3,
+			"velocityLand": 3,
 			"vitalityWater": -5,
 			"vitalityLand": -5,
 			"poisonous": 0,
