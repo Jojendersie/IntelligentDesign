@@ -196,7 +196,8 @@ class Map
 		{
 			if( m_mapObjects[i].removed )
 			{
-			//	delete(m_mapObjects[i]);
+				Entity e = cast(Entity)m_mapObjects[i];
+				if( e !is null ) e.removeGenes();
 				m_mapObjects.replaceInPlace(i, i+1, [m_mapObjects.back()]);
 				m_mapObjects.popBack();
 			}
@@ -290,7 +291,7 @@ private:
 		Gene[4] randomGenes;
 		foreach(s; species)
 		{
-			uint numEntities = uniform(m_startPopMinNum, m_startPopMaxNum, rnd);
+			uint numEntities = m_startPopNum;
 
 			// find a home!
 			s.origin = Vector2f(uniform(m_startPopDistribution*1.5f, m_ground.length    - m_startPopDistribution * 1.5f, rnd),
@@ -302,17 +303,12 @@ private:
 				entityPos.x += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 				entityPos.y += uniform(-m_startPopDistribution, m_startPopDistribution, rnd);
 
-				// choose random genese
-				for(int gene=0; gene<randomGenes.length; ++gene)
-					randomGenes[gene] = globalGenePool.values[uniform(0, globalGenePool.length, rnd)];
-
-				m_mapObjects ~= new Entity(s, entityPos, randomGenes);
+				m_mapObjects ~= new Entity(s, entityPos);
 			}
 		}
 	}
 
-	enum uint m_startPopMinNum = 10;
-	enum uint m_startPopMaxNum = 15;
+	enum uint m_startPopNum = 1;
 	enum float m_startPopDistribution = 5.0f;
 	enum uint m_turnsPerPlantSpawn = 3;
 

@@ -12,13 +12,42 @@ import std.random;
 
 class Entity: MapObject
 {
-	this(Species species, Vector2f position, ref Gene[4] genes)
+	this(Species species, Vector2f position)
 	{
 		this();
 		m_species = species;
 		m_position = position;
-		m_geneSlots = genes;
+		m_geneSlots = chooseGenes(Game.globalGenePool().values(), 4);
 		m_vitality = uniform(50.0f, 90.0f);
+		updatePropertiesAndReportGenes();
+	}
+
+	// Do a cell division
+	this(Entity selfParent)
+	{
+		this();
+		m_species = selfParent.species;
+		m_position = selfParent.position;
+		m_geneSlots = selfParent.m_geneSlots;
+		m_vitality = selfParent.vitality * 0.33f;
+		selfParent.m_vitality *= 0.33f;
+		// Make a gene pool without the 4 existing genes
+		Gene[] pool;
+		for( int g = 0; g < Game.globalGenePool().values().length; ++g )
+		{
+			bool contained = false;
+			for( int og = 0; og < m_geneSlots.length; ++og )
+				if( Game.globalGenePool().values()[g] == m_geneSlots[og] )
+					contained = true;
+			if( !contained ) pool ~= Game.globalGenePool().values()[g];
+		}
+		// One mutation for each
+		m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(pool, 1)[0];
+		int slot = uniform(0,m_geneSlots.length-1);
+		m_species.decreaseGene(selfParent.m_geneSlots[slot]);
+		selfParent.m_geneSlots[slot] = chooseGenes(pool, 1)[0];
+		m_species.increaseGene(selfParent.m_geneSlots[slot]);
+
 		updatePropertiesAndReportGenes();
 	}
 
@@ -55,10 +84,15 @@ class Entity: MapObject
 		for(int pgene=0; pgene<genePool.length; ++pgene)
 		{
 			// add if not duplicated
-			float contained = false;
+			bool contained = false;
 			for(int xgene=0; xgene<genePoolCpy.length; ++xgene)
+			{
 				if( genePool[pgene] == genePoolCpy[xgene] )
+				{
 					contained = true;
+					break;
+				}
+			}
 			if( !contained )
 			{
 				genePoolCpy ~= genePool[pgene];
@@ -90,22 +124,7 @@ class Entity: MapObject
 		return outputGenes;
 	}
 
-	// Do a cell division
-	this(Entity selfParent)
-	{
-		this();
-		m_species = selfParent.species;
-		m_position = selfParent.position;
-		m_geneSlots = selfParent.m_geneSlots;
-		m_vitality = selfParent.vitality * 0.33f;
-		selfParent.m_vitality *= 0.33f;
-		// One mutation for each
-		m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
-		selfParent.m_geneSlots[uniform(0,m_geneSlots.length-1)] = chooseGenes(Game.globalGenePool().values(), 1)[0];
-		updatePropertiesAndReportGenes();
-	}
-
-	~this()
+	void removeGenes()
 	{
 		foreach(gene; m_geneSlots)
 			m_species.decreaseGene(gene);

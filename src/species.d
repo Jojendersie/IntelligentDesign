@@ -29,7 +29,7 @@ class Species
 	struct GeneUsage
 	{
 		Vector2f priority;
-		int num = 1;
+		int num = 0;
 
 		void randomizePriority()
 		{
