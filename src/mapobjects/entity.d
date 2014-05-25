@@ -174,8 +174,8 @@ class Entity: MapObject
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_displayRadius));
 		if( canHaveSex() )
 		{
-			circleShape.outlineColor = m_species.color * 1.2f;
-			circleShape.outlineThickness = 2.5f;
+			circleShape.outlineColor = m_species.color * 1.3f;
+			circleShape.outlineThickness = 3.5f;
 			circleShape.radius = circleShape.radius - circleShape.outlineThickness;
 			circleShape.position = circleShape.position + Vector2f( circleShape.outlineThickness, circleShape.outlineThickness);
 		}

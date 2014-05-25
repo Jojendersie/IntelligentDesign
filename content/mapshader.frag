@@ -20,7 +20,7 @@ void main()
   vec3 waterColor = vec3(0.0, 0.0, landWaterIndicator);
 
   float edge = customStep(landWaterIndicator)*2 - 1.0;
-  edge = sqrt(abs(edge)) * sign(edge);
+  edge = pow(abs(edge), 0.35) * sign(edge);
   gl_FragColor.rgb = mix(waterColor, landColor, edge * 0.5 + 0.5);
 
   gl_FragColor.rgb *= vec3(0.8) + noiseVal * 0.2;
