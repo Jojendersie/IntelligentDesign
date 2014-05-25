@@ -219,7 +219,7 @@ class Map
 		// Brute force search
 		foreach(obj; m_mapObjects)
 		{
-			if( !obj.removed && lengthSq(obj.position - pos + Vector2f(obj.displayRadius,obj.displayRadius) * 0.5f) <= obj.displayRadius*obj.displayRadius)
+			if( !obj.removed && lengthSq(obj.position - pos) <= obj.displayRadius*obj.displayRadius)
 			{
 				return obj;
 			}

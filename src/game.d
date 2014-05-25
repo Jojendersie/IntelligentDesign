@@ -54,8 +54,7 @@ class Game
 		m_map.setAttraction(Mouse.isButtonPressed(Mouse.Button.Left), m_mouseWorldPos);
 
 		MapObject hoverObject = m_map.queryObjectExact(m_mouseWorldPos);
-		if(Mouse.isButtonPressed(Mouse.Button.Left))
-			m_gui.updateHoverObject(hoverObject);
+		m_gui.updateHoverObject(hoverObject);
 
 		m_gui.update(m_screenManager, window, m_playerSpecies);
 	}

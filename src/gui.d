@@ -265,7 +265,8 @@ class GUI
 
 	void updateHoverObject(MapObject obj)
 	{
-		m_hoveredObject = obj;
+		if(obj !is null)
+			m_hoveredObject = obj;
 	}
 
 private:
