@@ -211,7 +211,6 @@ class Entity: MapObject
 		rnd.seed(m_properties.vitalityWater + m_properties.vitalityLand);
 		float prefersLand = (m_properties.vitalityLand - m_properties.vitalityWater) * 0.5f
 			+ (m_properties.velocityLand - m_properties.velocityWater) * 0.15f;
-		float maxViewDistance = m_properties.viewDistance * m_viewDistanceMultiplier;
 		// Take 16 random samples in a circle and check for land / water
 		for( int i = 0; i < 8; ++i )
 		{
@@ -275,6 +274,8 @@ class Entity: MapObject
 
 	@property ref const(Gene[4]) geneSlots() const		{ return m_geneSlots; }
 	@property ref const(Properties) properties() const	{ return m_properties; }
+
+	@property float maxViewDistance() const { return m_properties.viewDistance * m_viewDistanceMultiplier; } 
 
 	bool canHaveSex() const { return m_vitality > m_sexThreshold; }
 

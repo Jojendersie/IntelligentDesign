@@ -34,7 +34,7 @@ class Map
 		}
 	}
 
-	void render(RenderWindow window, const ScreenManager screenManager)
+	void render(RenderWindow window, const ScreenManager screenManager, Vector2f mouseWorldCor)
 	{
 		immutable FloatRect visibleGameArea = screenManager.visibleAreaRelativeCoor;
 		immutable Vector2f visibleGameArea_UnitsMin = Vector2f(max(cast(float)visibleGameArea.left, 0.0f), max(cast(float)visibleGameArea.top, 0.0f));
@@ -55,7 +55,20 @@ class Map
 			   visibleGameArea_UnitsMax.x > mapObject.position.x &&
 			   visibleGameArea_UnitsMax.y > mapObject.position.y)
 			{
-			   mapObject.render(window, screenManager);
+				mapObject.render(window, screenManager);
+
+				// draw circles for entities
+				Entity entity = cast(Entity)mapObject;
+				if(entity !is null && (entity.position - mouseWorldCor).lengthSq() <= entity.maxViewDistance * entity.maxViewDistance)
+				{
+					CircleShape circle = new CircleShape();
+					circle.position = screenManager.relativeCoorToScreenCoor(entity.position - Vector2f(entity.maxViewDistance, entity.maxViewDistance));
+					circle.radius = screenManager.relativeLengthToScreenLength(entity.maxViewDistance);
+					circle.fillColor = Color(0,0,0,0);
+					circle.outlineColor = Color(255,255,255, 50);
+					circle.outlineThickness = 1.5f;
+					window.draw(circle);
+				}
 			}
 		}
 	}

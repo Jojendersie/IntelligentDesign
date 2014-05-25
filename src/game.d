@@ -37,7 +37,7 @@ class Game
 	{
 		m_screenManager.resolution = Vector2f(window.size().x, window.size().y); // brain-dead simple: If the resolution change, our game can handle this ;D
 		
-		m_map.render(window, m_screenManager);
+		m_map.render(window, m_screenManager, m_mouseWorldPos);
 		m_gui.render(window, m_screenManager, m_playerSpecies);
 	}
 
@@ -49,10 +49,10 @@ class Game
 
 		m_map.update();
 		
-		Vector2f mouseWorldPos = m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window));
-		m_map.setAttraction(Mouse.isButtonPressed(Mouse.Button.Left), mouseWorldPos);
+		m_mouseWorldPos = m_screenManager.screenCoorToRelativeCoor(Mouse.getPosition(window));
+		m_map.setAttraction(Mouse.isButtonPressed(Mouse.Button.Left), m_mouseWorldPos);
 
-		MapObject hoverObject = m_map.queryObjectExact(mouseWorldPos);
+		MapObject hoverObject = m_map.queryObjectExact(m_mouseWorldPos);
 		if(Mouse.isButtonPressed(Mouse.Button.Left))
 			m_gui.updateHoverObject(hoverObject);
 
@@ -91,6 +91,8 @@ class Game
 private:
 	ScreenManager m_screenManager;
 	Map m_map;
+
+	Vector2f m_mouseWorldPos = Vector2f(0,0);
 
 	Species[] m_allSpecies = new Species[5];
 	Species m_playerSpecies;
