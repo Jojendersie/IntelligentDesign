@@ -22,12 +22,8 @@ class Gene
 	    if( val != null ) m_properties.vitalityLand		= cast(int)val.integer;
 		val = "poisonous" in data;
 	    if( val != null ) m_properties.poisonous		= cast(int)val.integer;
-		val = "poisonResistence" in data;
-	    if( val != null ) m_properties.poisonResistence	= cast(int)val.integer;
-		val = "spiky" in data;
-	    if( val != null ) m_properties.spiky			= cast(int)val.integer;
-		val = "spikeResistence" in data;
-	    if( val != null ) m_properties.spikeResistence	= cast(int)val.integer;
+		val = "melee" in data;
+	    if( val != null ) m_properties.melee			= cast(int)val.integer;
 		val = "herbivore" in data;
 	    if( val != null ) m_properties.herbivore		= cast(int)val.integer;
 		val = "carnivore" in data;

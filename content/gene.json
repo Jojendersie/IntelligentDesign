@@ -8,9 +8,7 @@
 			"vitalityWater": -5,
 			"vitalityLand": -5,
 			"poisonous": 0,
-			"poisonResistence": 0,
-			"spiky": 0,
-			"spikeResistence": 0,
+			"melee": 0,
 			"herbivore": 1,
 			"carnivore": 1,
 			"viewDistance": 4
@@ -54,17 +52,17 @@
 		{
 			"name": "Antipoison",
 			"image": "poisonResistence.png",
-			"poisonResistence": 1
+			"poisonous": 1
 		},
 		{
 			"name": "Spikes",
 			"image": "spikes.png",
-			"spiky": 1
+			"melee": 1
 		},
 		{
 			"name": "Armor",
 			"image": "armor.png",
-			"spikeResistence": 1
+			"melee": 1
 		},
 		{
 			"name": "Teeth",

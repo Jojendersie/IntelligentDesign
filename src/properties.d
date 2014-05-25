@@ -6,10 +6,8 @@ struct Properties
 	int velocityLand;		// Movement factor on land
 	int vitalityWater;		// Life loss factor in water
 	int vitalityLand;		// Life loss factor on land
-	int poisonous;			// Damage value if eaten
-	int poisonResistence;	// Resistence value if eating
-	int spiky;				// Damaga value if eaten
-	int spikeResistence;	// Resistence value if eating
+	int poisonous;			// Damage value in poison damage class
+	int melee;				// Damaga value in melee damaga class
 	int herbivore;			// Can eat plants
 	int carnivore;			// Can eat other animals
 	int viewDistance;		// How far can this unit see
@@ -24,9 +22,7 @@ struct Properties
 			results.vitalityWater = vitalityWater + rhs.vitalityWater;
 			results.vitalityLand = vitalityLand + rhs.vitalityLand;
 			results.poisonous = poisonous + rhs.poisonous;
-			results.poisonResistence = poisonResistence + rhs.poisonResistence;
-			results.spiky = spiky + rhs.spiky;
-			results.spikeResistence = spikeResistence + rhs.spikeResistence;
+			results.melee = melee + rhs.melee;
 			results.herbivore = herbivore + rhs.herbivore;
 			results.carnivore = carnivore + rhs.carnivore;
 			results.viewDistance = viewDistance + rhs.viewDistance;
@@ -38,9 +34,7 @@ struct Properties
 			results.vitalityWater = vitalityWater - rhs.vitalityWater;
 			results.vitalityLand = vitalityLand - rhs.vitalityLand;
 			results.poisonous = poisonous - rhs.poisonous;
-			results.poisonResistence = poisonResistence - rhs.poisonResistence;
-			results.spiky = spiky - rhs.spiky;
-			results.spikeResistence = spikeResistence - rhs.spikeResistence;
+			results.melee = melee - rhs.melee;
 			results.herbivore = herbivore - rhs.herbivore;
 			results.carnivore = carnivore - rhs.carnivore;
 			results.viewDistance = viewDistance - rhs.viewDistance;
@@ -61,11 +55,8 @@ struct Properties
 		if(vitalityLand != 0 || vitalityWater != 0)
 			description ~= "Vitality (Land/Water): " ~ to!string(vitalityLand) ~ "/" ~ to!string(vitalityWater) ~ " | ";
 
-		if(poisonous != 0 || poisonResistence != 0)
-			description ~= "Poison (Att/Def): " ~ to!string(poisonous) ~ "/" ~ to!string(poisonResistence) ~ " | ";
-
-		if(spiky != 0 || spikeResistence != 0)
-			description ~= "Spike (Att/Def): " ~ to!string(spiky) ~ "/" ~ to!string(spikeResistence) ~ " | ";
+		if(poisonous != 0 || melee != 0)
+			description ~= "Attack (Poison/Melee): " ~ to!string(poisonous) ~ "/" ~ to!string(melee) ~ " | ";
 
 		if(herbivore != 0 || carnivore != 0)
 			description ~= "Herbivore / Carnivore: " ~ to!string(herbivore) ~ "/" ~ to!string(carnivore) ~ " | ";
