@@ -15,6 +15,7 @@ class Game
 {
 	this(RenderWindow window)
 	{
+		Entity.loadTextures();
 		m_screenManager = new ScreenManager(Vector2f(window.size().x, window.size().y));
 		loadGenes();
 

@@ -48,7 +48,8 @@ class Map
 		window.draw(m_groundSprite);
 
 		// draw all entites
-		++m_turnCounter;
+		//++m_turnCounter;
+		int numDrawn = 0;
 		foreach(mapObject; m_mapObjects)
 		{
 			if(visibleGameArea_UnitsMin.x < mapObject.position.x + mapObject.displayRadius &&
@@ -56,6 +57,7 @@ class Map
 			   visibleGameArea_UnitsMax.x > mapObject.position.x &&
 			   visibleGameArea_UnitsMax.y > mapObject.position.y)
 			{
+				++numDrawn;
 				mapObject.render(window, screenManager, m_turnCounter);
 
 				// draw circles for entities
@@ -72,6 +74,8 @@ class Map
 				}
 			}
 		}
+
+		//writeln("numdrawn: ", numDrawn);
 	}
 
 	void update()

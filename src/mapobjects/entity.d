@@ -12,6 +12,17 @@ import std.random;
 
 class Entity: MapObject
 {
+	static void loadTextures()
+	{
+		m_spikeTexture = new Texture();
+		m_spikeTexture.loadFromFile("content/entityspikes.png");
+		m_spikeTexture.setSmooth(true);
+
+		m_poisonTexture = new Texture();
+		m_poisonTexture.loadFromFile("content/entitypoison.png");
+		m_poisonTexture.setSmooth(true);
+	}
+
 	this(Species species, Vector2f position)
 	{
 		this();
@@ -139,24 +150,49 @@ class Entity: MapObject
 
 	float getRadius() const	{ return m_entityRadius * (1.0f + log(m_vitality / 100.0f + 1.0f)); }
 
-
-
 	override void render(RenderWindow window, const ScreenManager screenManager, int stepCount)
 	{
 		float breath = log(cast(float)fmax(0, m_land ? m_prefersLand : -m_prefersLand) + 1);
-		m_displayRadius = getRadius() + sin((++stepCount + cast(int)&this) * 0.2 + ) * breath * 0.1;
+		m_displayRadius = getRadius() + sin((++stepCount + cast(int)&this) * 0.2) * breath * 0.1;
 
-		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius),
-										   m_species.isPlayer ? 3 : 10);
+		if(m_properties.melee > 0)
+		{
+			float sizeWorld = m_displayRadius*2 + m_properties.melee * 0.5f;
+			float sizePix = screenManager.relativeLengthToScreenLength(sizeWorld);
+			Sprite spikes = new Sprite();
+			spikes.setTexture(m_spikeTexture);
+			spikes.scale = Vector2f(sizePix / m_spikeTexture.getSize().x, sizePix / m_spikeTexture.getSize().y);
+			spikes.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(sizeWorld/2, sizeWorld/2));
+			window.draw(spikes);
+		}
+
+
+
+		auto circleShape = new CircleShape(screenManager.relativeLengthToScreenLength(m_displayRadius), 10);
+				circleShape.fillColor = m_species.color;
+
 		circleShape.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(m_displayRadius, m_displayRadius));
-		circleShape.fillColor = m_species.color;
 		if( canHaveSex() )
 		{
 			circleShape.outlineColor = m_species.color * 1.2f;
 			circleShape.outlineThickness = 2.5f;
-			circleShape.radius = circleShape.radius - circleShape.outlineThickness * 2;
+			circleShape.radius = circleShape.radius - circleShape.outlineThickness;
+			circleShape.position = circleShape.position + Vector2f( circleShape.outlineThickness, circleShape.outlineThickness);
 		}
+			
 		window.draw(circleShape);
+
+
+		if(m_properties.poisonous > 0)
+		{
+			float sizeWorld = m_displayRadius + m_properties.poisonous * 0.5f;
+			float sizePix = screenManager.relativeLengthToScreenLength(sizeWorld);
+			Sprite poison = new Sprite();
+			poison.setTexture(m_poisonTexture);
+			poison.scale = Vector2f(sizePix / m_poisonTexture.getSize().x, sizePix / m_poisonTexture.getSize().y);
+			poison.position = screenManager.relativeCoorToScreenCoor(m_position - Vector2f(sizeWorld/2, sizeWorld/2));
+			window.draw(poison);
+		}
 	}
 
 	// Observe the environment search a target and go one step.
@@ -411,4 +447,7 @@ private:
 	enum float m_randomWalkWeight = 0.3f;
 	enum float m_vitalityLossFactor = 0.01f;
 	enum float m_attractionPointFactor = 14.0f;
+
+	static Texture m_spikeTexture;
+	static Texture m_poisonTexture;
 }
